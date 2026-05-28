@@ -97,7 +97,7 @@ export function Nav() {
 
         <a
           ref={rightRef}
-          href="https://www.instagram.com/samuelbristow"
+          href="https://www.instagram.com/samuelbristow.photo/"
           target="_blank"
           rel="noopener noreferrer"
           className="hidden md:block text-[12px] font-medium uppercase tracking-[0.2em] leading-[1.33] text-[var(--brand-black)] hover:opacity-60 transition-opacity duration-200"
@@ -149,7 +149,7 @@ export function Nav() {
         </nav>
 
         <a
-          href="https://www.instagram.com/samuelbristow"
+          href="https://www.instagram.com/samuelbristow.photo/"
           target="_blank"
           rel="noopener noreferrer"
           className="text-[12px] font-medium uppercase tracking-[0.2em] leading-[1.33] text-[var(--brand-black)]"
