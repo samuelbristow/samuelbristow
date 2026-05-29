@@ -13,7 +13,7 @@ const links = [
 ];
 
 const NAV_FONT: React.CSSProperties = {
-  fontFamily: "var(--font-lora), serif",
+  fontFamily: "var(--font-bodoni), serif",
   fontSize: "clamp(15px, 1.5vw, 18px)",
   letterSpacing: "0.01em",
   lineHeight: "1.6",

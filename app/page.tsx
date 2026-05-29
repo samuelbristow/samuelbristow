@@ -76,7 +76,7 @@ export default function Home() {
       >
         <span
           style={{
-            fontFamily: "var(--font-lora), serif",
+            fontFamily: "var(--font-bodoni), serif",
             fontSize: "clamp(15px, 1.5vw, 18px)",
             letterSpacing: "0.01em",
             lineHeight: "1.6",
@@ -121,7 +121,7 @@ export default function Home() {
                   <span
                     className="text-[var(--brand-black)]"
                     style={{
-                      fontFamily: "var(--font-lora), serif",
+                      fontFamily: "var(--font-bodoni), serif",
                       fontSize: "clamp(20px, 2vw, 26px)",
                       letterSpacing: "0.01em",
                     }}
@@ -135,7 +135,7 @@ export default function Home() {
                 <span
                   className="text-[var(--brand-black)]"
                   style={{
-                    fontFamily: "var(--font-lora), serif",
+                    fontFamily: "var(--font-bodoni), serif",
                     fontSize: "16px",
                     letterSpacing: "0.01em",
                   }}

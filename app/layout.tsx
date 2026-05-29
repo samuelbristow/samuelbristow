@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Lora, DM_Sans } from "next/font/google";
+import { Bodoni_Moda, DM_Sans } from "next/font/google";
 import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 import "./globals.css";
 
-const lora = Lora({
-  variable: "--font-lora",
+const bodoniModa = Bodoni_Moda({
+  variable: "--font-bodoni",
   subsets: ["latin"],
   weight: ["400"],
   style: ["normal", "italic"],
@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${lora.variable} ${dmSans.variable}`}>
+    <html lang="en" className={`${bodoniModa.variable} ${dmSans.variable}`}>
       <body>
         <script dangerouslySetInnerHTML={{ __html: scrollScript }} />
         <Nav />
