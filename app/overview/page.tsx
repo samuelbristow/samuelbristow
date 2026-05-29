@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { desktopRows, mobileRows, type Cell, type Item, type Row } from "./data";
 
-const ROW_GAP_PCT = 2.5;
-const ROW_MARGIN_PCT = 2.5;
-const GROUP_GAP_PCT = 0.3;
+const ROW_GAP_PCT = 5;
+const ROW_MARGIN_PCT = 5;
+const GROUP_GAP_PCT = 1.5;
 
 function HoverOverlay() {
   return (
@@ -38,6 +38,12 @@ function ImageTile({ item }: { item: Item }) {
   );
 }
 
+function HoverBorder() {
+  return (
+    <div className="absolute inset-0 border border-transparent group-hover/card:border-[var(--brand-black)] transition-colors duration-300 pointer-events-none z-20" />
+  );
+}
+
 function CellLink({ cell }: { cell: Cell }) {
   if (cell.type === "single") {
     return (
@@ -48,22 +54,27 @@ function CellLink({ cell }: { cell: Cell }) {
       >
         <ImageTile item={cell.item} />
         <HoverOverlay />
+        <HoverBorder />
       </Link>
     );
   }
   return (
     <Link
       href="#"
-      data-item
-      className="group/card relative overflow-hidden flex h-full min-w-0"
+      className="group/card relative flex h-full min-w-0"
       style={{ flex: `${cell.ar} 0 0`, gap: `${GROUP_GAP_PCT}%` }}
     >
       {cell.items.map((it, i) => (
-        <div key={i} className="min-w-0" style={{ flex: `${it.ar} 0 0`, height: "100%" }}>
+        <div
+          key={i}
+          className="min-w-0 overflow-hidden"
+          style={{ flex: `${it.ar} 0 0`, height: "100%" }}
+        >
           <ImageTile item={it} />
         </div>
       ))}
       <HoverOverlay />
+      <HoverBorder />
     </Link>
   );
 }
