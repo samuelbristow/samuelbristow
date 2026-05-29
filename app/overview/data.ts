@@ -78,15 +78,13 @@ export const desktopRows: Row[] = [
       { src: "/assets/images/overview/260308_Tekinoktay_Day_134615_V2.webp", w: 2500, h: 3333, ar: 0.7501 },
     ] },
   ] },
-  { ar: 3.0004, cells: [
+  { ar: 4.3488, cells: [
     { type: "group", ar: 2.2503, items: [
       { src: "/assets/images/overview/260308_Tekinoktay_Day_134668.webp", w: 2500, h: 3333, ar: 0.7501 },
       { src: "/assets/images/overview/260308_Tekinoktay_Day_134719.webp", w: 2500, h: 3333, ar: 0.7501 },
       { src: "/assets/images/overview/260308_Tekinoktay_Day_134733.webp", w: 2500, h: 3333, ar: 0.7501 },
     ] },
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/260308_Tekinoktay_Day_134770_1.webp", w: 2500, h: 3333, ar: 0.7501 } },
-  ] },
-  { ar: 1.3484, cells: [
     { type: "single", ar: 1.3484, item: { src: "/assets/images/overview/260308_Tekinoktay_Day_134770_2.webp", w: 2500, h: 1854, ar: 1.3484 } },
   ] },
   { ar: 3.7503, cells: [
@@ -122,15 +120,13 @@ export const desktopRows: Row[] = [
       { src: "/assets/images/overview/260308_Tekinoktay_Day_135290_V1.webp", w: 2500, h: 3334, ar: 0.7499 },
     ] },
   ] },
-  { ar: 3.0002, cells: [
+  { ar: 4.3335, cells: [
     { type: "group", ar: 2.2501, items: [
       { src: "/assets/images/overview/260308_Tekinoktay_Day_135290_V3.webp", w: 2500, h: 3334, ar: 0.7499 },
       { src: "/assets/images/overview/260308_Tekinoktay_Day_135309.webp", w: 2500, h: 3333, ar: 0.7501 },
       { src: "/assets/images/overview/260308_Tekinoktay_Day_135309_copy.webp", w: 2500, h: 3333, ar: 0.7501 },
     ] },
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/555_33_stack.webp", w: 2500, h: 3333, ar: 0.7501 } },
-  ] },
-  { ar: 1.3333, cells: [
     { type: "single", ar: 1.3333, item: { src: "/assets/images/overview/555_43.webp", w: 3500, h: 2625, ar: 1.3333 } },
   ] },
   { ar: 3.7783, cells: [
@@ -142,13 +138,11 @@ export const desktopRows: Row[] = [
     { type: "single", ar: 0.7779, item: { src: "/assets/images/overview/Butter_textures.webp", w: 2000, h: 2571, ar: 0.7779 } },
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/Cherries_dropper.webp", w: 2500, h: 3333, ar: 0.7501 } },
   ] },
-  { ar: 3.0002, cells: [
+  { ar: 4.3335, cells: [
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/Cherry_juice.webp", w: 2500, h: 3333, ar: 0.7501 } },
     { type: "single", ar: 0.7499, item: { src: "/assets/images/overview/Christina_texture_test5249.webp", w: 2500, h: 3334, ar: 0.7499 } },
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/Comme_des_garcon_nike.webp", w: 2500, h: 3333, ar: 0.7501 } },
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/Crown_Affair1_copy.webp", w: 2500, h: 3333, ar: 0.7501 } },
-  ] },
-  { ar: 1.3333, cells: [
     { type: "single", ar: 1.3333, item: { src: "/assets/images/overview/Diemme_1.webp", w: 3500, h: 2625, ar: 1.3333 } },
   ] },
   { ar: 3.7505, cells: [
@@ -450,10 +444,8 @@ export const mobileRows: Row[] = [
       { src: "/assets/images/overview/260308_Tekinoktay_Day_134733.webp", w: 2500, h: 3333, ar: 0.7501 },
     ] },
   ] },
-  { ar: 0.7501, cells: [
+  { ar: 2.0985, cells: [
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/260308_Tekinoktay_Day_134770_1.webp", w: 2500, h: 3333, ar: 0.7501 } },
-  ] },
-  { ar: 1.3484, cells: [
     { type: "single", ar: 1.3484, item: { src: "/assets/images/overview/260308_Tekinoktay_Day_134770_2.webp", w: 2500, h: 1854, ar: 1.3484 } },
   ] },
   { ar: 2.2501, cells: [
@@ -502,10 +494,8 @@ export const mobileRows: Row[] = [
       { src: "/assets/images/overview/260308_Tekinoktay_Day_135309_copy.webp", w: 2500, h: 3333, ar: 0.7501 },
     ] },
   ] },
-  { ar: 0.7501, cells: [
+  { ar: 2.0834, cells: [
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/555_33_stack.webp", w: 2500, h: 3333, ar: 0.7501 } },
-  ] },
-  { ar: 1.3333, cells: [
     { type: "single", ar: 1.3333, item: { src: "/assets/images/overview/555_43.webp", w: 3500, h: 2625, ar: 1.3333 } },
   ] },
   { ar: 1.5002, cells: [
@@ -526,10 +516,8 @@ export const mobileRows: Row[] = [
     { type: "single", ar: 0.7499, item: { src: "/assets/images/overview/Christina_texture_test5249.webp", w: 2500, h: 3334, ar: 0.7499 } },
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/Comme_des_garcon_nike.webp", w: 2500, h: 3333, ar: 0.7501 } },
   ] },
-  { ar: 0.7501, cells: [
+  { ar: 2.0834, cells: [
     { type: "single", ar: 0.7501, item: { src: "/assets/images/overview/Crown_Affair1_copy.webp", w: 2500, h: 3333, ar: 0.7501 } },
-  ] },
-  { ar: 1.3333, cells: [
     { type: "single", ar: 1.3333, item: { src: "/assets/images/overview/Diemme_1.webp", w: 3500, h: 2625, ar: 1.3333 } },
   ] },
   { ar: 1.5002, cells: [
