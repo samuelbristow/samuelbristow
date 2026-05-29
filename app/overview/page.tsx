@@ -83,20 +83,28 @@ function CellTile({ cell, cellIdx }: { cell: Cell; cellIdx: number }) {
   );
 }
 
-function MosaicGrid({ rows }: { rows: Row[] }) {
+function MosaicGrid({
+  rows,
+  rowGap = ROW_GAP_PCT,
+  rowMargin = ROW_MARGIN_PCT,
+}: {
+  rows: Row[];
+  rowGap?: number;
+  rowMargin?: number;
+}) {
   let idx = 0;
   return (
     <>
       {rows.map((row, ri) => {
-        const ar = row.ar / (1 - (ROW_GAP_PCT / 100) * (row.cells.length - 1));
+        const ar = row.ar / (1 - (rowGap / 100) * (row.cells.length - 1));
         return (
           <div
             key={ri}
             className="flex w-full"
             style={{
               aspectRatio: ar,
-              gap: `${ROW_GAP_PCT}%`,
-              marginBottom: `${ROW_MARGIN_PCT}%`,
+              gap: `${rowGap}%`,
+              marginBottom: `${rowMargin}%`,
             }}
           >
             {row.cells.map((cell, ci) => {
@@ -281,7 +289,7 @@ export default function Overview() {
       </div>
 
       <div className="px-3 md:hidden">
-        <MosaicGrid rows={mobileRows} />
+        <MosaicGrid rows={mobileRows} rowGap={16} rowMargin={16} />
       </div>
 
       <div className="hidden md:block px-6 lg:px-10 max-w-[1400px] mx-auto">
