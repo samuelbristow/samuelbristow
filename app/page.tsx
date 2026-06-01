@@ -42,6 +42,98 @@ const isFullWidth = (item: Item) =>
   item.type === "video" ||
   ((item.type === "image" || item.type === "gif") && item.landscape);
 
+const itemAr = (item: Item) =>
+  item.type === "video" ? 1276 / 720 : item.width / item.height;
+
+function alignClass(n: number) {
+  const m = n % 3;
+  if (m === 0) return "md:ml-auto md:mr-0";
+  if (m === 1) return "md:mr-auto md:ml-0";
+  return "md:mx-auto";
+}
+
+type Placed = { item: Item; align: string };
+
+function buildColumns(list: Item[]): [Placed[], Placed[]] {
+  const cols: [Placed[], Placed[]] = [[], []];
+  const heights = [0, 0];
+  list.forEach((item, i) => {
+    const wFrac = isFullWidth(item) ? 1 : 0.62;
+    const h = wFrac / itemAr(item) + 0.4;
+    const c = heights[0] <= heights[1] ? 0 : 1;
+    cols[c].push({ item, align: alignClass(i) });
+    heights[c] += h;
+  });
+  return cols;
+}
+
+const [colA, colB] = buildColumns(items);
+
+function MediaCard({ item, align }: { item: Item; align: string }) {
+  const full = isFullWidth(item);
+  return (
+    <div data-item className="mb-[6em] md:mb-[12em] lg:mb-[15em]">
+      <Link
+        href={item.href}
+        className={`group/card relative block mx-auto ${align}`}
+        style={{ width: full ? "var(--item-w-full, 92%)" : "var(--item-w, 75%)" }}
+      >
+        {item.type === "video" ? (
+          <video
+            src={item.src}
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{ width: "100%", height: "auto" }}
+            className="block"
+          />
+        ) : (
+          <Image
+            src={item.image}
+            alt=""
+            width={item.width}
+            height={item.height}
+            unoptimized={item.type === "gif"}
+            style={{ width: "100%", height: "auto" }}
+            className="block"
+            sizes="(max-width: 767px) 85vw, 30vw"
+          />
+        )}
+
+        <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 bg-[var(--white-smoke)]/80 pointer-events-none">
+          <span
+            className="text-[var(--brand-black)]"
+            style={{
+              fontFamily: "var(--font-bodoni), serif",
+              fontSize: "clamp(20px, 2vw, 26px)",
+              letterSpacing: "0.01em",
+            }}
+          >
+            Client
+          </span>
+        </div>
+      </Link>
+
+      <div
+        className="md:hidden mt-3 mx-auto"
+        style={{ width: full ? "var(--item-w-full, 92%)" : "var(--item-w, 75%)" }}
+      >
+        <span
+          className="block text-center text-[var(--brand-black)]"
+          style={{
+            fontFamily: "var(--font-bodoni), serif",
+            fontSize: "16px",
+            letterSpacing: "0.01em",
+          }}
+        >
+          Client
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
 
@@ -86,66 +178,23 @@ export default function Home() {
         </span>
       </div>
 
-      <div className="columns-1 md:columns-2 gap-[8em] px-10 md:px-16 lg:px-[120px]">
+      <div className="md:hidden px-10">
         {items.map((item) => (
-          <div key={item.id} data-item className="mb-[4em] md:mb-[10em] break-inside-avoid">
-            <Link href={item.href} className="block group/card">
-              <div
-                className="mx-auto relative"
-                style={{ width: isFullWidth(item) ? "var(--item-w-full, 92%)" : "var(--item-w, 75%)" }}
-              >
-                {item.type === "video" ? (
-                  <video
-                    src={item.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    style={{ width: "100%", height: "auto" }}
-                    className="block"
-                  />
-                ) : (
-                  <Image
-                    src={item.image}
-                    alt=""
-                    width={item.width}
-                    height={item.height}
-                    unoptimized={item.type === "gif"}
-                    style={{ width: "100%", height: "auto" }}
-                    className="block"
-                    sizes="(max-width: 767px) 85vw, 45vw"
-                  />
-                )}
-
-                <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 bg-[var(--white-smoke)]/80 pointer-events-none">
-                  <span
-                    className="text-[var(--brand-black)]"
-                    style={{
-                      fontFamily: "var(--font-bodoni), serif",
-                      fontSize: "clamp(20px, 2vw, 26px)",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    Client
-                  </span>
-                </div>
-              </div>
-
-              <div className="md:hidden mt-3 text-center">
-                <span
-                  className="text-[var(--brand-black)]"
-                  style={{
-                    fontFamily: "var(--font-bodoni), serif",
-                    fontSize: "16px",
-                    letterSpacing: "0.01em",
-                  }}
-                >
-                  Client
-                </span>
-              </div>
-            </Link>
-          </div>
+          <MediaCard key={item.id} item={item} align="mx-auto" />
         ))}
+      </div>
+
+      <div className="hidden md:flex gap-[7em] lg:gap-[10em] px-16 lg:px-[120px]">
+        <div className="flex-1 min-w-0 flex flex-col">
+          {colA.map(({ item, align }) => (
+            <MediaCard key={item.id} item={item} align={align} />
+          ))}
+        </div>
+        <div className="flex-1 min-w-0 flex flex-col">
+          {colB.map(({ item, align }) => (
+            <MediaCard key={item.id} item={item} align={align} />
+          ))}
+        </div>
       </div>
     </main>
   );

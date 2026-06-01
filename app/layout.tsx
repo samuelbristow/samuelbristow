@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, DM_Sans } from "next/font/google";
+import { Bodoni_Moda, DM_Sans, Scheherazade_New } from "next/font/google";
 import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 import "./globals.css";
@@ -15,6 +15,12 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+});
+
+const scheherazade = Scheherazade_New({
+  variable: "--font-scheherazade",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -48,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bodoniModa.variable} ${dmSans.variable}`}>
+    <html lang="en" className={`${bodoniModa.variable} ${dmSans.variable} ${scheherazade.variable}`}>
       <body>
         <script dangerouslySetInnerHTML={{ __html: scrollScript }} />
         <Nav />

@@ -236,13 +236,13 @@ function Lightbox({
 export default function Motion() {
   return (
     <main
-      className="pt-[120px] md:pt-[180px] pb-[6em] md:pb-[10em]"
+      className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em]"
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
       <style dangerouslySetInnerHTML={{ __html: LIGHTBOX_CSS }} />
 
       <div
-        className="section-name sticky z-20 text-center pb-[2em] md:pb-[4em]"
+        className="section-name sticky z-20 text-center pb-[1em] md:pb-[2em]"
         style={{ top: 0, paddingTop: "clamp(63px, 7.5vw, 93px)" }}
       >
         <span

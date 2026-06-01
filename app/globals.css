@@ -3,8 +3,15 @@
 :root {
     --white-smoke: #faf9f6;
     --brand-black: #141210;
-    --item-w: 75%;
-    --item-w-full: 92%;
+    --item-w: 82%;
+    --item-w-full: 96%;
+    --bg: var(--white-smoke);
+    --fg: var(--brand-black);
+}
+
+body:has([data-theme="dark"]) {
+    --bg: var(--brand-black);
+    --fg: var(--white-smoke);
 }
 
 @theme inline {
@@ -16,17 +23,18 @@
 
 @media (min-width: 768px) {
     :root {
-        --item-w: 55%;
-        --item-w-full: 85%;
+        --item-w: 62%;
+        --item-w-full: 92%;
     }
 }
 
 body {
-    background-color: var(--white-smoke);
-    color: var(--brand-black);
+    background-color: var(--bg);
+    color: var(--fg);
     font-family: var(--font-dm-sans), sans-serif;
     font-size: 14px;
     line-height: 1.5;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 .nav-full {
