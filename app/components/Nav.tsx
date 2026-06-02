@@ -27,9 +27,9 @@ export function Nav() {
         href="/"
         className="block text-[var(--fg)] leading-none text-center"
         style={{
-          fontFamily: "var(--font-scheherazade), serif",
-          fontSize: "clamp(28px, 4vw, 44px)",
-          letterSpacing: "0.02em",
+          fontFamily: "var(--font-bodoni), serif",
+          fontSize: "clamp(34px, 5vw, 58px)",
+          letterSpacing: "0.01em",
         }}
       >
         Samuel Bristow
