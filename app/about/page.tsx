@@ -38,9 +38,8 @@ const bodyStyle: React.CSSProperties = {
 export default function About() {
   return (
     <main
-      data-theme="dark"
       className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em] min-h-screen"
-      style={{ backgroundColor: "var(--bg)", color: "var(--fg)" }}
+      style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
       <div
         className="section-name sticky z-20 text-center pb-[1em] md:pb-[2em]"

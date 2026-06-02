@@ -1,17 +1,12 @@
 @import "tailwindcss";
 
 :root {
-    --white-smoke: #faf9f6;
+    --white-smoke: #ffffff;
     --brand-black: #141210;
-    --item-w: 82%;
-    --item-w-full: 96%;
+    --item-w: 88%;
+    --item-w-full: 100%;
     --bg: var(--white-smoke);
     --fg: var(--brand-black);
-}
-
-body:has([data-theme="dark"]) {
-    --bg: var(--brand-black);
-    --fg: var(--white-smoke);
 }
 
 @theme inline {
@@ -23,8 +18,8 @@ body:has([data-theme="dark"]) {
 
 @media (min-width: 768px) {
     :root {
-        --item-w: 62%;
-        --item-w-full: 92%;
+        --item-w: 72%;
+        --item-w-full: 100%;
     }
 }
 

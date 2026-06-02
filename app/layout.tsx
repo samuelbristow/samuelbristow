@@ -29,18 +29,15 @@ export const metadata: Metadata = {
 };
 
 const scrollScript = `(function(){
-  var s=false,t;
+  var lastY=0,hidden=false;
+  function gy(){return window.visualViewport?window.visualViewport.pageTop:(window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0);}
+  function set(h){if(h===hidden)return;hidden=h;document.body.classList.toggle('is-scrolled',h);}
   function upd(){
-    var y=window.visualViewport?window.visualViewport.pageTop:(window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0);
-    clearTimeout(t);
-    if(!s && y>30){
-      s=true;document.body.classList.add('is-scrolled');
-    }else if(s && y<10){
-      s=false;document.body.classList.remove('is-scrolled');
-    }
-    if(s){
-      t=setTimeout(function(){s=false;document.body.classList.remove('is-scrolled');},10000);
-    }
+    var y=gy();
+    if(y<=40){set(false);}
+    else if(y<lastY-2){set(false);}
+    else if(y>lastY+2){set(true);}
+    lastY=y;
   }
   window.addEventListener('scroll',upd,{passive:true});
   window.addEventListener('touchmove',upd,{passive:true});
