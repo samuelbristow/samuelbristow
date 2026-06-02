@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Preloader } from "./components/Preloader";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -162,6 +163,7 @@ export default function Home() {
       className="pt-[120px] md:pt-[180px] pb-[6em] md:pb-[10em]"
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
+      <Preloader />
       <div
         className="section-name sticky z-20 text-center pb-[2em] md:pb-[4em]"
         style={{ top: 0, paddingTop: "clamp(63px, 7.5vw, 93px)" }}

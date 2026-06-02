@@ -29,6 +29,8 @@ const scrollScript = `(function(){
   if(window.visualViewport)window.visualViewport.addEventListener('scroll',upd);
 })();`;
 
+const preloaderScript = `setTimeout(function(){var p=document.getElementById('preloader');if(p){p.style.transition='opacity .5s ease';p.style.opacity='0';setTimeout(function(){if(p)p.style.display='none';},520);}document.body.style.overflow='';},3800);`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +43,7 @@ export default function RootLayout({
       </head>
       <body>
         <script dangerouslySetInnerHTML={{ __html: scrollScript }} />
+        <script dangerouslySetInnerHTML={{ __html: preloaderScript }} />
         <Nav />
         <div>
           {children}
