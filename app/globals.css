@@ -7,6 +7,8 @@
     --item-w-full: 100%;
     --bg: var(--white-smoke);
     --fg: var(--brand-black);
+    --font-bodoni: "psfournier-std-grand";
+    --font-dm-sans: "psfournier-std-petit";
 }
 
 @theme inline {
