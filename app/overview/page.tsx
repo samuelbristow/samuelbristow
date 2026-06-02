@@ -278,8 +278,9 @@ export default function Overview() {
       >
         <span
           style={{
-            fontFamily: "var(--font-bodoni), serif",
+            fontFamily: '"psfournier-std", serif',
             fontSize: "clamp(13px, 1.2vw, 15px)",
+            fontWeight: 300,
             letterSpacing: "0.01em",
             lineHeight: "1.6",
           }}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -9,11 +10,13 @@ const links = [
   { label: "Motion", href: "/motion" },
   { label: "About", href: "/about" },
   { label: "Studio", href: "/studio" },
+  { label: "Instagram", href: "https://www.instagram.com/samuelbristow.photo/", external: true },
 ];
 
 const NAV_FONT: React.CSSProperties = {
-  fontFamily: "var(--font-bodoni), serif",
+  fontFamily: '"psfournier-std", serif',
   fontSize: "clamp(13px, 1.2vw, 15px)",
+  fontWeight: 300,
   letterSpacing: "0.01em",
   lineHeight: "1.6",
 };
@@ -39,14 +42,27 @@ export function Nav() {
         className="nav-full flex items-center justify-center flex-wrap gap-x-4 gap-y-1 mt-2 md:mt-3 text-[var(--fg)]"
         style={{ ...NAV_FONT, maxWidth: "360px", textAlign: "center" }}
       >
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`hover:opacity-60 transition-opacity duration-200${pathname === link.href ? " opacity-100" : ""}`}
-          >
-            {link.label}
-          </Link>
+        {links.map((link, i) => (
+          <Fragment key={link.href}>
+            {link.external ? (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:opacity-60 transition-opacity duration-200"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                href={link.href}
+                className={`hover:opacity-60 transition-opacity duration-200${pathname === link.href ? " opacity-100" : ""}`}
+              >
+                {link.label}
+              </Link>
+            )}
+            {i === 2 && <div className="basis-full h-0" aria-hidden="true" />}
+          </Fragment>
         ))}
       </nav>
     </div>
