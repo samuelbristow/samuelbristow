@@ -22,7 +22,7 @@ export function Nav() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed z-40 top-0 left-1/2 -translate-x-1/2 flex flex-col items-center pt-5 md:pt-7">
+    <div className="nav-root fixed z-40 top-0 left-1/2 -translate-x-1/2 flex flex-col items-center pt-5 md:pt-7">
       <Link
         href="/"
         className="block text-[var(--fg)] leading-none text-center"

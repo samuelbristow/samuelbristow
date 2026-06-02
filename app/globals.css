@@ -42,6 +42,22 @@ body.is-scrolled .nav-full {
     transition: opacity 0.15s ease 0s;
 }
 
+.nav-root:hover .nav-full {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transition: opacity 0.3s ease;
+}
+
+body:has(.nav-root:hover) .section-name {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s ease;
+}
+
+body:has(.about-page) footer {
+    display: none;
+}
+
 .section-name {
     opacity: 0;
     pointer-events: none;

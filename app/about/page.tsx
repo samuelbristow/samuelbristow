@@ -30,60 +30,42 @@ const clients = [
 
 const bodyStyle: React.CSSProperties = {
   fontFamily: "var(--font-dm-sans), sans-serif",
-  fontSize: "clamp(13px, 1.2vw, 15px)",
+  fontSize: "clamp(11px, 1vw, 13px)",
   letterSpacing: "0.02em",
-  lineHeight: "1.8",
+  lineHeight: "1.6",
 };
 
 export default function About() {
   return (
     <main
-      className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em] min-h-screen"
+      className="about-page min-h-[100svh] flex flex-col items-center justify-center text-center px-6 pt-[120px] md:pt-[150px] pb-[2em]"
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
-      <div
-        className="section-name sticky z-20 text-center pb-[1em] md:pb-[2em]"
-        style={{ top: 0, paddingTop: "clamp(63px, 7.5vw, 93px)" }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--font-bodoni), serif",
-            fontSize: "clamp(15px, 1.5vw, 18px)",
-            letterSpacing: "0.01em",
-            lineHeight: "1.6",
-          }}
-        >
-          About
-        </span>
-      </div>
-
-      <div className="px-6 max-w-[820px] mx-auto text-center">
+      <div className="max-w-[720px] mx-auto">
         <div
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-3"
           style={{
             fontFamily: "var(--font-bodoni), serif",
-            fontSize: "clamp(20px, 2.4vw, 30px)",
-            lineHeight: "1.55",
+            fontSize: "clamp(14px, 1.6vw, 20px)",
+            lineHeight: "1.45",
             letterSpacing: "0.01em",
           }}
         >
           <p className="m-0">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
           <p className="m-0">
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-            non proident, sunt in culpa qui officia deserunt mollit anim id est
-            laborum.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur.
           </p>
         </div>
 
-        <div className="mt-[6em] md:mt-[8em] flex flex-col gap-2" style={bodyStyle}>
+        <div className="mt-[1.8em] flex flex-col gap-1" style={bodyStyle}>
           <p className="m-0">Represented by WiB New York Inc.</p>
-          <p className="m-0 mt-2">
+          <p className="m-0">
             C:{" "}
             <a
               href="tel:+13107176796"
@@ -101,16 +83,22 @@ export default function About() {
           </p>
         </div>
 
-        <div className="mt-[6em] md:mt-[8em]" style={bodyStyle}>
-          <p className="m-0">Select Clients</p>
-          <p className="m-0 mt-4 opacity-70">{clients.join(",  ")}</p>
+        <div className="mt-[1.8em]" style={bodyStyle}>
+          <p className="m-0 opacity-50">Select Clients</p>
+          <ul className="mt-2 m-0 p-0 list-none columns-3 sm:columns-4 lg:columns-5 gap-x-7 text-left max-w-[680px] mx-auto">
+            {clients.map((c) => (
+              <li key={c} className="break-inside-avoid">
+                {c}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <p
-          className="m-0 mt-[6em] md:mt-[8em] opacity-40"
+          className="m-0 mt-[1.8em] opacity-40"
           style={{
             fontFamily: "var(--font-dm-sans), sans-serif",
-            fontSize: "clamp(11px, 1vw, 12px)",
+            fontSize: "clamp(10px, 1vw, 11px)",
             letterSpacing: "0.04em",
           }}
         >
