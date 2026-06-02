@@ -8,37 +8,69 @@ gsap.registerPlugin(useGSAP);
 
 let played = false;
 
-type Media = { type: "image" | "video"; src: string };
+type Frame =
+  | { type: "pair"; imgs: [string, string] }
+  | { type: "land"; img: string };
 
-const rows: Media[][] = [
-  [
-    { type: "image", src: "/assets/images/chanel/1.jpg" },
-    { type: "image", src: "/assets/images/tekinoktay-day/1.jpg" },
-    { type: "video", src: "/assets/hero.mp4" },
-    { type: "image", src: "/assets/images/CK+Eternity+intro+1.jpg.webp" },
-    { type: "image", src: "/assets/images/calderalab/1.jpg" },
-    { type: "image", src: "/assets/images/Eucalyptusrain5-ezgif.com-video-to-gif-converter.gif" },
-    { type: "image", src: "/assets/images/chanel/2.jpg" },
-    { type: "image", src: "/assets/images/ezgif-3-b506754c48.gif" },
-  ],
+const frames: Frame[] = [
+  { type: "pair", imgs: ["/assets/images/chanel/1.jpg", "/assets/images/tekinoktay-day/1.jpg"] },
+  { type: "land", img: "/assets/images/overview/555_43.webp" },
+  { type: "pair", imgs: ["/assets/images/calderalab/1.jpg", "/assets/images/chanel/2.jpg"] },
+  { type: "land", img: "/assets/images/overview/260308_Tekinoktay_Day_134770_2.webp" },
+  { type: "pair", imgs: ["/assets/images/tekinoktay-day/2.jpg", "/assets/images/calderalab/2.jpg"] },
 ];
 
-function Tile({ m }: { m: Media }) {
-  const style: React.CSSProperties = {
-    height: "32vh",
-    width: "auto",
-    objectFit: "cover",
-    display: "block",
-    flexShrink: 0,
-  };
-  if (m.type === "video") {
-    return <video src={m.src} autoPlay muted loop playsInline style={style} />;
+function FrameView({ frame }: { frame: Frame }) {
+  if (frame.type === "pair") {
+    return (
+      <div
+        data-frame
+        className="absolute inset-0 flex items-center justify-center gap-[3vw]"
+        style={{ opacity: 0 }}
+      >
+        {frame.imgs.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt=""
+            decoding="async"
+            style={{
+              height: "min(60vh, 50vw)",
+              aspectRatio: "3 / 4",
+              width: "auto",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        ))}
+      </div>
+    );
   }
-  return <img src={m.src} alt="" decoding="async" style={style} />;
+  return (
+    <div
+      data-frame
+      className="absolute inset-0 flex items-center justify-center"
+      style={{ opacity: 0 }}
+    >
+      <img
+        src={frame.img}
+        alt=""
+        decoding="async"
+        style={{
+          height: "min(66vh, 68vw)",
+          aspectRatio: "3 / 2",
+          width: "auto",
+          objectFit: "cover",
+          display: "block",
+        }}
+      />
+    </div>
+  );
 }
 
 export function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const framesRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(false);
 
@@ -50,9 +82,9 @@ export function Preloader() {
       }
 
       const root = rootRef.current!;
+      const framesEl = framesRef.current!;
       const name = nameRef.current!;
-      const rowEls = gsap.utils.toArray<HTMLElement>("[data-prow]");
-      const logo = document.getElementById("brand-logo");
+      const frameEls = gsap.utils.toArray<HTMLElement>("[data-frame]");
 
       document.body.style.overflow = "hidden";
 
@@ -65,53 +97,38 @@ export function Preloader() {
         setDone(true);
       };
 
-      const fallback = window.setTimeout(finish, 3600);
-
-      const settle = () => {
-        try {
-          if (!logo) throw new Error();
-          const l = logo.getBoundingClientRect();
-          const n = name.getBoundingClientRect();
-          return {
-            x: l.left + l.width / 2 - (n.left + n.width / 2),
-            y: l.top + l.height / 2 - (n.top + n.height / 2),
-            scale: l.height / n.height,
-          };
-        } catch {
-          return { x: 0, y: -window.innerHeight * 0.42, scale: 0.3 };
-        }
-      };
+      const fallback = window.setTimeout(finish, 4200);
 
       const tl = gsap.timeline({
-        defaults: { ease: "power3.inOut" },
+        defaults: { ease: "power2.out" },
         onComplete: finish,
       });
 
-      const W = window.innerWidth;
+      gsap.set(frameEls, { opacity: 0, scale: 1.06 });
+      gsap.set(name, { opacity: 0, scale: 0.9 });
 
-      gsap.set(name, { opacity: 0, scale: 1.06 });
-
-      tl.to(name, { opacity: 1, scale: 1, duration: 0.7, ease: "power2.out" }, 0);
-      rowEls.forEach((row) => {
-        tl.fromTo(
-          row,
-          { x: -W * 0.28 },
-          { x: W * 0.28, duration: 2.6, ease: "power1.inOut" },
-          0
-        );
+      const step = 0.34;
+      frameEls.forEach((f, i) => {
+        tl.to(f, { opacity: 1, scale: 1, duration: 0.5 }, i * step);
       });
-      tl.add(() => {
-        const s = settle();
-        gsap.to(name, {
-          x: s.x,
-          y: s.y,
-          scale: s.scale,
-          duration: 1.1,
-          ease: "power3.inOut",
-        });
-      }, 1.5)
-        .to(rowEls, { opacity: 0, duration: 0.7, ease: "power2.inOut" }, 1.9)
-        .to(root, { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 2.4);
+
+      const nameIn = frameEls.length * step + 0.15;
+      tl.to(name, { opacity: 1, scale: 1, duration: 0.5 }, nameIn);
+      tl.to(
+        name,
+        { scale: 3.6, opacity: 0, duration: 0.95, ease: "power2.in" },
+        nameIn + 0.6
+      );
+      tl.to(
+        framesEl,
+        { opacity: 0, duration: 0.7, ease: "power2.inOut" },
+        nameIn + 0.6
+      );
+      tl.to(
+        root,
+        { opacity: 0, duration: 0.5, ease: "power2.inOut" },
+        nameIn + 0.95
+      );
 
       return () => window.clearTimeout(fallback);
     },
@@ -124,35 +141,31 @@ export function Preloader() {
     <div
       ref={rootRef}
       id="preloader"
-      className="fixed inset-0 z-[100] overflow-hidden flex items-center justify-center"
+      className="fixed inset-0 z-[100] overflow-hidden"
       style={{ backgroundColor: "var(--white-smoke)" }}
     >
-      <div className="absolute inset-0 flex flex-col justify-center items-center gap-[3vh]" style={{ opacity: 0.5 }}>
-        {rows.map((row, i) => (
-          <div
-            key={i}
-            data-prow
-            className="flex gap-[2vw] w-max max-w-none"
-            style={{ willChange: "transform" }}
-          >
-            {row.map((m, j) => (
-              <Tile key={j} m={m} />
-            ))}
-          </div>
+      <div ref={framesRef} className="absolute inset-0">
+        {frames.map((f, i) => (
+          <FrameView key={i} frame={f} />
         ))}
       </div>
 
       <div
         ref={nameRef}
-        className="relative z-10 text-center leading-none text-[var(--brand-black)] whitespace-nowrap"
-        style={{
-          fontFamily: "var(--font-bodoni), serif",
-          fontSize: "clamp(30px, 11vw, 200px)",
-          letterSpacing: "0.005em",
-          willChange: "transform",
-        }}
+        className="absolute inset-0 z-10 flex items-center justify-center px-6"
+        style={{ opacity: 0 }}
       >
-        Samuel Bristow
+        <span
+          className="text-center leading-none text-[var(--brand-black)] whitespace-nowrap"
+          style={{
+            fontFamily: "var(--font-bodoni), serif",
+            fontSize: "clamp(40px, 12vw, 220px)",
+            letterSpacing: "0.005em",
+            willChange: "transform, opacity",
+          }}
+        >
+          Samuel Bristow
+        </span>
       </div>
     </div>
   );
