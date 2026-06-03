@@ -20,7 +20,7 @@ const rows: NavLink[][] = [
 
 const NAV_FONT: React.CSSProperties = {
   fontFamily: '"psfournier-std", serif',
-  fontSize: "clamp(13px, 1.2vw, 15px)",
+  fontSize: "clamp(12px, 1.1vw, 13px)",
   fontWeight: 300,
   letterSpacing: "0.01em",
   lineHeight: "1.6",
@@ -29,26 +29,31 @@ const NAV_FONT: React.CSSProperties = {
 export function Nav() {
   const pathname = usePathname();
 
-  const renderLink = (link: NavLink) =>
-    link.external ? (
-      <a
-        key={link.href}
-        href={link.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hover:opacity-60 transition-opacity duration-200"
-      >
-        {link.label}
-      </a>
-    ) : (
+  const renderLink = (link: NavLink) => {
+    if (link.external) {
+      return (
+        <a
+          key={link.href}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:opacity-60 transition-opacity duration-200"
+        >
+          {link.label}
+        </a>
+      );
+    }
+    const active = pathname === link.href;
+    return (
       <Link
         key={link.href}
         href={link.href}
-        className={`hover:opacity-60 transition-opacity duration-200${pathname === link.href ? " opacity-100" : ""}`}
+        className={`hover:opacity-60 transition-opacity duration-200${active ? " opacity-100" : ""}`}
       >
         {link.label}
       </Link>
     );
+  };
 
   return (
     <div className="nav-root fixed z-40 top-0 left-1/2 -translate-x-1/2 flex flex-col items-center pt-5 md:pt-7">
@@ -57,9 +62,12 @@ export function Nav() {
         id="brand-logo"
         className="block text-[var(--fg)] leading-none text-center whitespace-nowrap"
         style={{
-          fontFamily: "var(--font-bodoni), serif",
-          fontSize: "clamp(34px, 5vw, 58px)",
-          letterSpacing: "0.01em",
+          fontFamily: '"psfournier-std", serif',
+          fontWeight: 300,
+          fontSize: "clamp(22px, 4.3vw, 52px)",
+          letterSpacing: "0.3em",
+          wordSpacing: "-0.45em",
+          paddingLeft: "0.3em",
         }}
       >
         Samuel Bristow

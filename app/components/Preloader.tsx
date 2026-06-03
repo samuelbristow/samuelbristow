@@ -82,7 +82,6 @@ export function Preloader() {
       }
 
       const root = rootRef.current!;
-      const framesEl = framesRef.current!;
       const name = nameRef.current!;
       const frameEls = gsap.utils.toArray<HTMLElement>("[data-frame]");
 
@@ -97,7 +96,7 @@ export function Preloader() {
         setDone(true);
       };
 
-      const fallback = window.setTimeout(finish, 4200);
+      const fallback = window.setTimeout(finish, 5500);
 
       const tl = gsap.timeline({
         defaults: { ease: "power2.out" },
@@ -105,29 +104,19 @@ export function Preloader() {
       });
 
       gsap.set(frameEls, { opacity: 0, scale: 1.06 });
-      gsap.set(name, { opacity: 0, scale: 0.9 });
+      gsap.set(name, { opacity: 0 });
 
-      const step = 0.34;
+      const step = 0.28;
       frameEls.forEach((f, i) => {
         tl.to(f, { opacity: 1, scale: 1, duration: 0.5 }, i * step);
       });
 
       const nameIn = frameEls.length * step + 0.15;
-      tl.to(name, { opacity: 1, scale: 1, duration: 0.5 }, nameIn);
-      tl.to(
-        name,
-        { scale: 3.6, opacity: 0, duration: 0.95, ease: "power2.in" },
-        nameIn + 0.6
-      );
-      tl.to(
-        framesEl,
-        { opacity: 0, duration: 0.7, ease: "power2.inOut" },
-        nameIn + 0.6
-      );
+      tl.to(name, { opacity: 1, duration: 0.5 }, nameIn);
       tl.to(
         root,
-        { opacity: 0, duration: 0.5, ease: "power2.inOut" },
-        nameIn + 0.95
+        { opacity: 0, duration: 0.7, ease: "power2.inOut" },
+        nameIn + 0.5 + 2.0
       );
 
       return () => window.clearTimeout(fallback);
@@ -158,9 +147,12 @@ export function Preloader() {
         <span
           className="text-center leading-none text-[var(--brand-black)] whitespace-nowrap"
           style={{
-            fontFamily: "var(--font-bodoni), serif",
-            fontSize: "clamp(40px, 12vw, 220px)",
-            letterSpacing: "0.005em",
+            fontFamily: '"psfournier-std", serif',
+            fontWeight: 300,
+            fontSize: "clamp(34px, 8.5vw, 120px)",
+            letterSpacing: "0.3em",
+            wordSpacing: "-0.45em",
+            paddingLeft: "0.3em",
             willChange: "transform, opacity",
           }}
         >
