@@ -71,7 +71,7 @@ function FrameView({ frame }: { frame: Frame }) {
 export function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null);
   const framesRef = useRef<HTMLDivElement>(null);
-  const nameRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLSpanElement>(null);
   const [done, setDone] = useState(false);
 
   useGSAP(
@@ -139,13 +139,10 @@ export function Preloader() {
         ))}
       </div>
 
-      <div
-        ref={nameRef}
-        className="absolute inset-0 z-10 flex items-center justify-center px-6"
-        style={{ opacity: 0 }}
-      >
+      <div className="absolute inset-0 flex items-center justify-center px-6">
         <span
-          className="text-center leading-none text-[var(--brand-black)] whitespace-nowrap"
+          ref={nameRef}
+          className="text-center leading-none whitespace-nowrap"
           style={{
             fontFamily: '"psfournier-std", serif',
             fontWeight: 300,
@@ -153,7 +150,9 @@ export function Preloader() {
             letterSpacing: "0.3em",
             wordSpacing: "-0.45em",
             paddingLeft: "0.3em",
-            willChange: "transform, opacity",
+            color: "#ffffff",
+            mixBlendMode: "difference",
+            opacity: 0,
           }}
         >
           Samuel Bristow

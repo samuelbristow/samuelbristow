@@ -60,17 +60,17 @@ export function Nav() {
       <Link
         href="/"
         id="brand-logo"
+        aria-label="Samuel Bristow"
         className="block text-[var(--fg)] leading-none text-center whitespace-nowrap"
         style={{
           fontFamily: '"psfournier-std", serif',
           fontWeight: 300,
-          fontSize: "clamp(22px, 4.3vw, 52px)",
-          letterSpacing: "0.3em",
-          wordSpacing: "-0.45em",
-          paddingLeft: "0.3em",
+          fontSize: "clamp(30px, 5vw, 58px)",
+          letterSpacing: "0.15em",
+          paddingLeft: "0.15em",
         }}
       >
-        Samuel Bristow
+        Samuel<span style={{ marginLeft: "0.15em" }}>Bristow</span>
       </Link>
 
       <nav
