@@ -65,7 +65,7 @@ export function Nav() {
         style={{
           fontFamily: '"psfournier-std", serif',
           fontWeight: 300,
-          fontSize: "clamp(30px, 5vw, 58px)",
+          fontSize: "clamp(24px, 4vw, 46px)",
           letterSpacing: "0.15em",
           paddingLeft: "0.15em",
         }}

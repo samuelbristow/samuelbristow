@@ -146,12 +146,11 @@ export function Preloader() {
           style={{
             fontFamily: '"psfournier-std", serif',
             fontWeight: 300,
-            fontSize: "clamp(34px, 8.5vw, 120px)",
+            fontSize: "clamp(27px, 7.8vw, 108px)",
             letterSpacing: "0.3em",
             wordSpacing: "-0.45em",
             paddingLeft: "0.3em",
-            color: "#ffffff",
-            mixBlendMode: "difference",
+            color: "var(--brand-black)",
             opacity: 0,
           }}
         >

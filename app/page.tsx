@@ -171,7 +171,7 @@ export default function Home() {
         <span
           style={{
             fontFamily: '"psfournier-std", serif',
-            fontSize: "clamp(16px, 1.5vw, 19px)",
+            fontSize: "clamp(18px, 1.7vw, 23px)",
             fontWeight: 300,
             letterSpacing: "0.01em",
             lineHeight: "1.6",
