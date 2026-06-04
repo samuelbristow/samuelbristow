@@ -14,14 +14,6 @@ type Frame =
   | { type: "pair"; imgs: string[] }
   | { type: "land"; img: string };
 
-const FALLBACK_FRAMES: Frame[] = [
-  { type: "pair", imgs: ["/assets/images/chanel/1.jpg", "/assets/images/tekinoktay-day/1.jpg"] },
-  { type: "land", img: "/assets/images/overview/555_43.webp" },
-  { type: "pair", imgs: ["/assets/images/calderalab/1.jpg", "/assets/images/chanel/2.jpg"] },
-  { type: "land", img: "/assets/images/overview/260308_Tekinoktay_Day_134770_2.webp" },
-  { type: "pair", imgs: ["/assets/images/tekinoktay-day/2.jpg", "/assets/images/calderalab/2.jpg"] },
-];
-
 function buildFrames(images: PreImg[]): Frame[] {
   const frames: Frame[] = [];
   let pending: string | null = null;
@@ -98,8 +90,7 @@ export function Preloader({ images }: { images?: PreImg[] }) {
   const nameRef = useRef<HTMLSpanElement>(null);
   const [done, setDone] = useState(false);
 
-  const frames =
-    images && images.length ? buildFrames(images) : FALLBACK_FRAMES;
+  const frames = images && images.length ? buildFrames(images) : [];
 
   useGSAP(
     () => {
