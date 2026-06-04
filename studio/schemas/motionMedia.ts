@@ -43,6 +43,12 @@ export const motionMedia = defineType({
       title: "Height",
       type: "number",
     }),
+    defineField({
+      name: "caption",
+      title: "Hover text",
+      type: "string",
+      description: "Shown over the item on hover. Leave blank for no label.",
+    }),
   ],
   preview: {
     select: { media: "image", type: "type" },

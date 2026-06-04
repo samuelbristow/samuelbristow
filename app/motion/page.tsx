@@ -27,6 +27,7 @@ function buildFromSanity(items: QMedia[]): {
       w: m.width,
       h: m.height,
       ar,
+      caption: m.caption,
     };
     return { type: "single", ar, item: media };
   });
@@ -43,7 +44,8 @@ const LIGHTBOX_CSS = `
 .lightbox:target{display:flex}
 `;
 
-function HoverOverlay() {
+function HoverOverlay({ caption }: { caption?: string }) {
+  if (!caption) return null;
   return (
     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 bg-[var(--white-smoke)]/80 pointer-events-none z-10">
       <span
@@ -54,7 +56,7 @@ function HoverOverlay() {
           letterSpacing: "0.01em",
         }}
       >
-        Client
+        {caption}
       </span>
     </div>
   );
@@ -98,7 +100,7 @@ function CellTile({ cell, cellIdx }: { cell: Cell; cellIdx: number }) {
       style={{ flex: `${cell.ar} 0 0` }}
     >
       <MediaTile item={cell.item} />
-      <HoverOverlay />
+      <HoverOverlay caption={cell.item.caption} />
       <HoverBorder />
     </a>
   );
@@ -145,15 +147,16 @@ function LightboxMedia({ item }: { item: Media }) {
       <video
         src={item.src}
         autoPlay
-        muted
         loop
         playsInline
+        controls
         style={{
           maxWidth: "100%",
           maxHeight: "100%",
           width: "auto",
           height: "auto",
           objectFit: "contain",
+          pointerEvents: "auto",
         }}
       />
     );
@@ -186,6 +189,7 @@ function Lightbox({
 }) {
   const prev = (index - 1 + total) % total;
   const next = (index + 1) % total;
+  const isVideo = cell.item.kind === "video";
 
   const btnBase =
     "absolute z-30 flex items-center justify-center text-[var(--brand-black)] no-underline";
@@ -208,7 +212,10 @@ function Lightbox({
           }}
         >
           <strong style={{ fontWeight: 600 }}>Samuel Bristow</strong>
-          <span style={{ opacity: 0.6 }}> / Motion / Client</span>
+          <span style={{ opacity: 0.6 }}>
+            {" "}
+            / Motion{cell.item.caption ? ` / ${cell.item.caption}` : ""}
+          </span>
         </h2>
       </div>
 
@@ -242,7 +249,9 @@ function Lightbox({
       </a>
 
       <div
-        className="absolute left-0 right-0 flex items-center justify-center px-0 md:px-[120px] pointer-events-none"
+        className={`absolute left-0 right-0 flex items-center justify-center px-0 md:px-[120px] ${
+          isVideo ? "z-40" : "pointer-events-none"
+        }`}
         style={{ top: "70px", bottom: "70px" }}
       >
         <LightboxMedia item={cell.item} />

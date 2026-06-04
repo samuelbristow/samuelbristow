@@ -1,7 +1,7 @@
 export type Item = { src: string; w: number; h: number; ar: number };
 export type Cell =
-  | { type: "single"; ar: number; item: Item }
-  | { type: "group"; ar: number; items: Item[] };
+  | { type: "single"; ar: number; item: Item; caption?: string }
+  | { type: "group"; ar: number; items: Item[]; caption?: string };
 export type Row = { cells: Cell[]; ar: number };
 
 export const desktopRows: Row[] = [

@@ -92,11 +92,14 @@ export async function getMotionItems(): Promise<Media[] | null> {
 }
 
 export type OverviewImg = { src: string; w: number; h: number };
-export type OverviewCell = OverviewImg[];
+export type OverviewCell = { images: OverviewImg[]; caption?: string };
 
 export async function getOverviewCells(): Promise<OverviewCell[] | null> {
-  const raw = await safeFetch<{ images: OverviewImg[] }[] | null>(
+  const raw = await safeFetch<
+    { images: OverviewImg[]; caption?: string }[] | null
+  >(
     `*[_type=="overviewPage"][0].cells[]{
+      "caption": caption,
       "images": images[]{
         "src": asset->url,
         "w": asset->metadata.dimensions.width,
@@ -106,8 +109,11 @@ export async function getOverviewCells(): Promise<OverviewCell[] | null> {
   );
   if (!raw || raw.length === 0) return null;
   return raw
-    .map((c) => (c.images || []).filter((i) => i.src && i.w && i.h))
-    .filter((c) => c.length > 0);
+    .map((c) => ({
+      images: (c.images || []).filter((i) => i.src && i.w && i.h),
+      caption: c.caption,
+    }))
+    .filter((c) => c.images.length > 0);
 }
 
 export type AboutData = {

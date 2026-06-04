@@ -14,6 +14,12 @@ export const overviewCell = defineType({
         "Add one image for a normal tile, or 2–3 to group them tightly as one unit.",
       validation: (r) => r.min(1).max(3),
     }),
+    defineField({
+      name: "caption",
+      title: "Hover text",
+      type: "string",
+      description: "Shown over the image on hover. Leave blank for no label.",
+    }),
   ],
   preview: {
     select: { media: "images.0", images: "images" },

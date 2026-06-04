@@ -6,7 +6,7 @@ import {
   type Item,
   type Row,
 } from "./data";
-import { getOverviewCells } from "../lib/sanity/queries";
+import { getOverviewCells, type OverviewCell } from "../lib/sanity/queries";
 import { sized } from "../lib/sanity/client";
 import { packRows } from "../lib/mosaic";
 
@@ -17,22 +17,23 @@ const GROUP_GAP_PCT = 1.5;
 const round = (n: number) => Math.round(n * 1e4) / 1e4;
 
 function buildFromSanity(
-  sanityCells: { src: string; w: number; h: number }[][]
+  sanityCells: OverviewCell[]
 ): { desktopRows: Row[]; mobileRows: Row[]; allCells: Cell[] } {
-  const cells: Cell[] = sanityCells.map((imgs) => {
-    const items: Item[] = imgs.map((im) => ({
+  const cells: Cell[] = sanityCells.map((c) => {
+    const items: Item[] = c.images.map((im) => ({
       src: sized(im.src, 1280),
       w: im.w,
       h: im.h,
       ar: round(im.w / im.h),
     }));
     if (items.length === 1) {
-      return { type: "single", ar: items[0].ar, item: items[0] };
+      return { type: "single", ar: items[0].ar, item: items[0], caption: c.caption };
     }
     return {
       type: "group",
       ar: round(items.reduce((s, i) => s + i.ar, 0)),
       items,
+      caption: c.caption,
     };
   });
   const pc = cells.map((c) => ({ ar: c.ar, data: c }));
@@ -48,7 +49,8 @@ const LIGHTBOX_CSS = `
 .lightbox:target{display:flex}
 `;
 
-function HoverOverlay() {
+function HoverOverlay({ caption }: { caption?: string }) {
+  if (!caption) return null;
   return (
     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 bg-[var(--white-smoke)]/80 pointer-events-none z-10">
       <span
@@ -59,7 +61,7 @@ function HoverOverlay() {
           letterSpacing: "0.01em",
         }}
       >
-        Client
+        {caption}
       </span>
     </div>
   );
@@ -93,7 +95,7 @@ function CellTile({ cell, cellIdx }: { cell: Cell; cellIdx: number }) {
         style={{ flex: `${cell.ar} 0 0` }}
       >
         <ImageTile item={cell.item} />
-        <HoverOverlay />
+        <HoverOverlay caption={cell.caption} />
         <HoverBorder />
       </a>
     );
@@ -113,7 +115,7 @@ function CellTile({ cell, cellIdx }: { cell: Cell; cellIdx: number }) {
           <ImageTile item={it} />
         </div>
       ))}
-      <HoverOverlay />
+      <HoverOverlay caption={cell.caption} />
       <HoverBorder />
     </a>
   );
@@ -205,7 +207,10 @@ function Lightbox({
           }}
         >
           <strong style={{ fontWeight: 600 }}>Samuel Bristow</strong>
-          <span style={{ opacity: 0.6 }}> / Overview / Client</span>
+          <span style={{ opacity: 0.6 }}>
+            {" "}
+            / Overview{cell.caption ? ` / ${cell.caption}` : ""}
+          </span>
         </h2>
       </div>
 

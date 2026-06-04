@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 /studio/node_modules
+
+# local reference copy, not part of the site
+/main
 /studio/dist
 /studio/.sanity
 .env
