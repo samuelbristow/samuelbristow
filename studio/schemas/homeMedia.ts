@@ -13,7 +13,7 @@ export const homeMedia = defineType({
       options: {
         list: [
           { title: "Image / GIF", value: "image" },
-          { title: "Video (mp4)", value: "video" },
+          { title: "Video", value: "video" },
         ],
         layout: "radio",
       },
@@ -27,9 +27,11 @@ export const homeMedia = defineType({
     }),
     defineField({
       name: "video",
-      title: "Video (mp4)",
+      title: "Video",
       type: "file",
-      options: { accept: "video/mp4" },
+      options: { accept: "video/*" },
+      description:
+        "mp4, mov, webm, etc. For best playback across browsers use mp4 (H.264) or webm.",
       hidden: ({ parent }) => parent?.type !== "video",
     }),
     defineField({

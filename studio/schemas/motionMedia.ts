@@ -12,7 +12,7 @@ export const motionMedia = defineType({
       initialValue: "video",
       options: {
         list: [
-          { title: "Video (mp4)", value: "video" },
+          { title: "Video", value: "video" },
           { title: "GIF / Image", value: "image" },
         ],
         layout: "radio",
@@ -20,9 +20,11 @@ export const motionMedia = defineType({
     }),
     defineField({
       name: "video",
-      title: "Video (mp4)",
+      title: "Video",
       type: "file",
-      options: { accept: "video/mp4" },
+      options: { accept: "video/*" },
+      description:
+        "mp4, mov, webm, etc. For best playback across browsers use mp4 (H.264) or webm.",
       hidden: ({ parent }) => parent?.type !== "video",
     }),
     defineField({
