@@ -54,6 +54,13 @@ export const homeMedia = defineType({
         "Turn on for wide / landscape media so it spans the full column width.",
     }),
     defineField({
+      name: "caption",
+      title: "Hover text",
+      type: "string",
+      description:
+        "Shown over the media on hover (and below it on mobile). Leave blank for no label.",
+    }),
+    defineField({
       name: "link",
       title: "Link (optional)",
       type: "url",

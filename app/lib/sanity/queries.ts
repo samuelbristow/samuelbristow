@@ -21,12 +21,14 @@ export type Media = {
   height: number;
   landscape?: boolean;
   link?: string;
+  caption?: string;
 };
 
 type RawMedia = {
   type?: "image" | "video";
   landscape?: boolean;
   link?: string;
+  caption?: string;
   imgUrl?: string;
   imgW?: number;
   imgH?: number;
@@ -45,6 +47,7 @@ function normalize(d: RawMedia): Media | null {
       height: d.vidH || 720,
       landscape: d.landscape ?? true,
       link: d.link,
+      caption: d.caption,
     };
   }
   if (!d.imgUrl || !d.imgW || !d.imgH) return null;
@@ -55,6 +58,7 @@ function normalize(d: RawMedia): Media | null {
     height: d.imgH,
     landscape: d.landscape,
     link: d.link,
+    caption: d.caption,
   };
 }
 
@@ -62,6 +66,7 @@ const MEDIA_PROJECTION = `{
   "type": type,
   "landscape": landscape,
   "link": link,
+  "caption": caption,
   "imgUrl": image.asset->url,
   "imgW": image.asset->metadata.dimensions.width,
   "imgH": image.asset->metadata.dimensions.height,

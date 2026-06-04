@@ -1,7 +1,7 @@
 export type Item =
-  | { type: "image"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean }
-  | { type: "gif"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean }
-  | { type: "video"; id: string; href: string; src: string; width?: number; height?: number; landscape?: boolean };
+  | { type: "image"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean; caption?: string }
+  | { type: "gif"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean; caption?: string }
+  | { type: "video"; id: string; href: string; src: string; width?: number; height?: number; landscape?: boolean; caption?: string };
 
 export type Placed = { item: Item; align: string };
 
@@ -29,9 +29,11 @@ export const FALLBACK_ITEMS: Item[] = [
   { type: "image", id: "tk-6", href: "/projects/tekinoktay-day", image: "/assets/images/tekinoktay-day/6.jpg", width: 1500, height: 2000 },
 ];
 
-export const isFullWidth = (item: Item) =>
-  item.type === "video" ||
-  ((item.type === "image" || item.type === "gif") && item.landscape);
+export const isFullWidth = (item: Item) => {
+  if (item.type === "video") return true;
+  if (item.landscape) return true;
+  return item.width / item.height > 1.1;
+};
 
 export const itemAr = (item: Item) =>
   item.type === "video"

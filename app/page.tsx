@@ -7,7 +7,7 @@ function toItem(m: Media, i: number): Item {
   const id = `home-${i}`;
   const href = m.link || "#";
   if (m.type === "video") {
-    return { type: "video", id, href, src: m.src, width: m.width, height: m.height, landscape: m.landscape };
+    return { type: "video", id, href, src: m.src, width: m.width, height: m.height, landscape: m.landscape, caption: m.caption };
   }
   const isGif = /\.gif($|\?)/i.test(m.src);
   return {
@@ -18,6 +18,7 @@ function toItem(m: Media, i: number): Item {
     width: m.width,
     height: m.height,
     landscape: m.landscape,
+    caption: m.caption,
   };
 }
 

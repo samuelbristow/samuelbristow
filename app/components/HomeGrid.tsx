@@ -43,35 +43,39 @@ function MediaCard({ item, align }: { item: Item; align: string }) {
           />
         )}
 
-        <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 bg-[var(--white-smoke)]/80 pointer-events-none">
+        {item.caption ? (
+          <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 bg-[var(--white-smoke)]/80 pointer-events-none">
+            <span
+              className="text-[var(--brand-black)]"
+              style={{
+                fontFamily: "var(--font-bodoni), serif",
+                fontSize: "clamp(20px, 2vw, 26px)",
+                letterSpacing: "0.01em",
+              }}
+            >
+              {item.caption}
+            </span>
+          </div>
+        ) : null}
+      </Link>
+
+      {item.caption ? (
+        <div
+          className="md:hidden mt-3 mx-auto"
+          style={{ width: full ? "var(--item-w-full, 92%)" : "var(--item-w, 75%)" }}
+        >
           <span
-            className="text-[var(--brand-black)]"
+            className="block text-center text-[var(--brand-black)]"
             style={{
               fontFamily: "var(--font-bodoni), serif",
-              fontSize: "clamp(20px, 2vw, 26px)",
+              fontSize: "16px",
               letterSpacing: "0.01em",
             }}
           >
-            Client
+            {item.caption}
           </span>
         </div>
-      </Link>
-
-      <div
-        className="md:hidden mt-3 mx-auto"
-        style={{ width: full ? "var(--item-w-full, 92%)" : "var(--item-w, 75%)" }}
-      >
-        <span
-          className="block text-center text-[var(--brand-black)]"
-          style={{
-            fontFamily: "var(--font-bodoni), serif",
-            fontSize: "16px",
-            letterSpacing: "0.01em",
-          }}
-        >
-          Client
-        </span>
-      </div>
+      ) : null}
     </div>
   );
 }
