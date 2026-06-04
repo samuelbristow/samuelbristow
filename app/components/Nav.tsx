@@ -5,18 +5,7 @@ import { usePathname } from "next/navigation";
 
 type NavLink = { label: string; href: string; external?: boolean };
 
-const rows: NavLink[][] = [
-  [
-    { label: "Latest Series", href: "/" },
-    { label: "Portfolio Overview", href: "/overview" },
-    { label: "Motion", href: "/motion" },
-  ],
-  [
-    { label: "About", href: "/about" },
-    { label: "Studio", href: "/studio" },
-    { label: "Instagram", href: "https://www.instagram.com/samuelbristow.photo/", external: true },
-  ],
-];
+const DEFAULT_INSTAGRAM = "https://www.instagram.com/samuelbristow.photo/";
 
 const NAV_FONT: React.CSSProperties = {
   fontFamily: '"psfournier-std", serif',
@@ -26,8 +15,21 @@ const NAV_FONT: React.CSSProperties = {
   lineHeight: "1.6",
 };
 
-export function Nav() {
+export function Nav({ instagramUrl }: { instagramUrl?: string }) {
   const pathname = usePathname();
+
+  const rows: NavLink[][] = [
+    [
+      { label: "Latest Series", href: "/" },
+      { label: "Portfolio Overview", href: "/overview" },
+      { label: "Motion", href: "/motion" },
+    ],
+    [
+      { label: "About", href: "/about" },
+      { label: "Studio", href: "/studio" },
+      { label: "Instagram", href: instagramUrl || DEFAULT_INSTAGRAM, external: true },
+    ],
+  ];
 
   const renderLink = (link: NavLink) => {
     if (link.external) {

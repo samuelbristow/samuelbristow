@@ -1,11 +1,47 @@
 import Image from "next/image";
-import { desktopRows, mobileRows, type Cell, type Item, type Row } from "./data";
+import {
+  desktopRows as fbDesktopRows,
+  mobileRows as fbMobileRows,
+  type Cell,
+  type Item,
+  type Row,
+} from "./data";
+import { getOverviewCells } from "../lib/sanity/queries";
+import { sized } from "../lib/sanity/client";
+import { packRows } from "../lib/mosaic";
 
 const ROW_GAP_PCT = 5;
 const ROW_MARGIN_PCT = 5;
 const GROUP_GAP_PCT = 1.5;
 
-const allCells: Cell[] = desktopRows.flatMap((row) => row.cells);
+const round = (n: number) => Math.round(n * 1e4) / 1e4;
+
+function buildFromSanity(
+  sanityCells: { src: string; w: number; h: number }[][]
+): { desktopRows: Row[]; mobileRows: Row[]; allCells: Cell[] } {
+  const cells: Cell[] = sanityCells.map((imgs) => {
+    const items: Item[] = imgs.map((im) => ({
+      src: sized(im.src, 1280),
+      w: im.w,
+      h: im.h,
+      ar: round(im.w / im.h),
+    }));
+    if (items.length === 1) {
+      return { type: "single", ar: items[0].ar, item: items[0] };
+    }
+    return {
+      type: "group",
+      ar: round(items.reduce((s, i) => s + i.ar, 0)),
+      items,
+    };
+  });
+  const pc = cells.map((c) => ({ ar: c.ar, data: c }));
+  return {
+    desktopRows: packRows(pc, 1280, 64, 340, 2),
+    mobileRows: packRows(pc, 390, 18, 260, 1),
+    allCells: cells,
+  };
+}
 
 const LIGHTBOX_CSS = `
 .lightbox{position:fixed;inset:0;z-index:60;display:none;background-color:var(--white-smoke)}
@@ -264,7 +300,16 @@ function Lightbox({
   );
 }
 
-export default function Overview() {
+export default async function Overview() {
+  const sanityCells = await getOverviewCells();
+  const { desktopRows, mobileRows, allCells } = sanityCells
+    ? buildFromSanity(sanityCells)
+    : {
+        desktopRows: fbDesktopRows,
+        mobileRows: fbMobileRows,
+        allCells: fbDesktopRows.flatMap((r) => r.cells),
+      };
+
   return (
     <main
       className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em]"

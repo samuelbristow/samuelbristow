@@ -1,9 +1,42 @@
-import { desktopRows, mobileRows, type Cell, type Media, type Row } from "./data";
+import {
+  desktopRows as fbDesktopRows,
+  mobileRows as fbMobileRows,
+  type Cell,
+  type Media,
+  type Row,
+} from "./data";
+import { getMotionItems, type Media as QMedia } from "../lib/sanity/queries";
+import { sized } from "../lib/sanity/client";
+import { packRows } from "../lib/mosaic";
 
 const ROW_GAP_PCT = 5;
 const ROW_MARGIN_PCT = 5;
 
-const allCells: Cell[] = desktopRows.flatMap((row) => row.cells);
+const round = (n: number) => Math.round(n * 1e4) / 1e4;
+
+function buildFromSanity(items: QMedia[]): {
+  desktopRows: Row[];
+  mobileRows: Row[];
+  allCells: Cell[];
+} {
+  const cells: Cell[] = items.map((m) => {
+    const ar = round(m.width / m.height);
+    const media: Media = {
+      kind: m.type === "video" ? "video" : "gif",
+      src: m.type === "video" ? m.src : sized(m.src, 1280),
+      w: m.width,
+      h: m.height,
+      ar,
+    };
+    return { type: "single", ar, item: media };
+  });
+  const pc = cells.map((c) => ({ ar: c.ar, data: c }));
+  return {
+    desktopRows: packRows(pc, 1280, 50, 320, 2),
+    mobileRows: packRows(pc, 390, 14, 240, 1),
+    allCells: cells,
+  };
+}
 
 const LIGHTBOX_CSS = `
 .lightbox{position:fixed;inset:0;z-index:60;display:none;background-color:var(--white-smoke)}
@@ -233,7 +266,16 @@ function Lightbox({
   );
 }
 
-export default function Motion() {
+export default async function Motion() {
+  const sanityItems = await getMotionItems();
+  const { desktopRows, mobileRows, allCells } = sanityItems
+    ? buildFromSanity(sanityItems)
+    : {
+        desktopRows: fbDesktopRows,
+        mobileRows: fbMobileRows,
+        allCells: fbDesktopRows.flatMap((r) => r.cells),
+      };
+
   return (
     <main
       className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em]"

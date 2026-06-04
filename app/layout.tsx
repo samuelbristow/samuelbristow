@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Scheherazade_New } from "next/font/google";
 import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
+import { getInstagramUrl } from "./lib/sanity/queries";
 import "./globals.css";
 
 const scheherazade = Scheherazade_New({
@@ -31,11 +32,12 @@ const scrollScript = `(function(){
 
 const preloaderScript = `setTimeout(function(){var p=document.getElementById('preloader');if(p){p.style.transition='opacity .5s ease';p.style.opacity='0';setTimeout(function(){if(p)p.style.display='none';},520);}document.body.style.overflow='';},5500);`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const instagramUrl = (await getInstagramUrl()) || undefined;
   return (
     <html lang="en" className={scheherazade.variable}>
       <head>
@@ -44,7 +46,7 @@ export default function RootLayout({
       <body>
         <script dangerouslySetInnerHTML={{ __html: scrollScript }} />
         <script dangerouslySetInnerHTML={{ __html: preloaderScript }} />
-        <Nav />
+        <Nav instagramUrl={instagramUrl} />
         <div>
           {children}
           <Footer />

@@ -1,19 +1,39 @@
-import Image from "next/image";
+import { getStudio } from "../lib/sanity/queries";
+import { sized } from "../lib/sanity/client";
 
-const images = [
-  {
-    src: "/assets/images/studio/709880788_3047816125423303_3667000234594789305_n.jpg",
-    w: 1228,
-    h: 1566,
-  },
-  {
-    src: "/assets/images/studio/709587190_1363283052355269_6670921504243095640_n.jpg",
-    w: 1400,
-    h: 933,
-  },
-];
+const FALLBACK = {
+  images: [
+    {
+      src: "/assets/images/studio/709880788_3047816125423303_3667000234594789305_n.jpg",
+      w: 1228,
+      h: 1566,
+    },
+    {
+      src: "/assets/images/studio/709587190_1363283052355269_6670921504243095640_n.jpg",
+      w: 1400,
+      h: 933,
+    },
+  ],
+  companyName: "Samuel Bristow Photography, Inc.",
+  address: ["Studio: 247 Water Street #305", "Brooklyn, NY 11201"],
+  phone: "(917) 721 4764",
+  email: "info@samuelbristow.com",
+};
 
-export default function Studio() {
+export default async function Studio() {
+  const data = await getStudio();
+
+  const images =
+    data?.images && data.images.length
+      ? data.images.map((i) => ({ src: sized(i.src, 1400), w: i.w, h: i.h }))
+      : FALLBACK.images;
+  const companyName = data?.companyName || FALLBACK.companyName;
+  const address =
+    data?.address && data.address.length ? data.address : FALLBACK.address;
+  const phone = data?.phone || FALLBACK.phone;
+  const email = data?.email || FALLBACK.email;
+  const telHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
+
   return (
     <main
       className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em]"
@@ -39,15 +59,15 @@ export default function Studio() {
       <div className="px-6 md:px-10 lg:px-[120px] max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
           {images.map((img) => (
-            <Image
+            <img
               key={img.src}
               src={img.src}
               alt=""
               width={img.w}
               height={img.h}
+              decoding="async"
               style={{ width: "100%", height: "auto" }}
               className="block"
-              sizes="(max-width: 767px) 90vw, 45vw"
             />
           ))}
         </div>
@@ -61,7 +81,7 @@ export default function Studio() {
               lineHeight: "1.3",
             }}
           >
-            Samuel Bristow Photography, Inc.
+            {companyName}
           </h2>
 
           <div
@@ -72,22 +92,25 @@ export default function Studio() {
               letterSpacing: "0.02em",
             }}
           >
-            <p className="m-0">Studio: 247 Water Street #305</p>
-            <p className="m-0">Brooklyn, NY 11201</p>
+            {address.map((line, i) => (
+              <p key={i} className="m-0">
+                {line}
+              </p>
+            ))}
             <p className="m-0 mt-4">
               <a
-                href="tel:+19177214764"
+                href={telHref}
                 className="hover:opacity-60 transition-opacity duration-200"
               >
-                (917) 721 4764
+                {phone}
               </a>
             </p>
             <p className="m-0">
               <a
-                href="mailto:info@samuelbristow.com"
+                href={`mailto:${email}`}
                 className="hover:opacity-60 transition-opacity duration-200"
               >
-                info@samuelbristow.com
+                {email}
               </a>
             </p>
           </div>
