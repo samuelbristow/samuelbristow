@@ -156,7 +156,7 @@ export type PreImg = { src: string; w: number; h: number };
 
 export async function getPreloaderImages(): Promise<PreImg[] | null> {
   const raw = await safeFetch<PreImg[] | null>(
-    `*[_type=="siteSettings"][0].preloaderImages[]{
+    `*[_type=="preloaderPage"][0].images[]{
       "src": asset->url,
       "w": asset->metadata.dimensions.width,
       "h": asset->metadata.dimensions.height

@@ -6,6 +6,7 @@ import { overviewPage } from "./overviewPage";
 import { motionPage } from "./motionPage";
 import { aboutPage } from "./aboutPage";
 import { studioPage } from "./studioPage";
+import { preloaderPage } from "./preloaderPage";
 import { siteSettings } from "./siteSettings";
 
 export const schemaTypes = [
@@ -17,5 +18,6 @@ export const schemaTypes = [
   motionPage,
   aboutPage,
   studioPage,
+  preloaderPage,
   siteSettings,
 ];

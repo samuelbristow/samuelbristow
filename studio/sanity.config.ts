@@ -9,6 +9,7 @@ const singletons = [
   { id: "motionPage", title: "Motion" },
   { id: "aboutPage", title: "About" },
   { id: "studioPage", title: "Studio" },
+  { id: "preloaderPage", title: "Preloader" },
   { id: "siteSettings", title: "Settings" },
 ];
 

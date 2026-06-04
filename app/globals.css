@@ -3,7 +3,7 @@
 :root {
     --white-smoke: #ffffff;
     --brand-black: #141210;
-    --item-w: 88%;
+    --item-w: 76%;
     --item-w-full: 100%;
     --bg: var(--white-smoke);
     --fg: var(--brand-black);
@@ -20,7 +20,7 @@
 
 @media (min-width: 768px) {
     :root {
-        --item-w: 72%;
+        --item-w: 60%;
         --item-w-full: 100%;
     }
 }
