@@ -1,6 +1,6 @@
 import { HomeGrid } from "./components/HomeGrid";
 import { buildColumns, FALLBACK_ITEMS, type Item } from "./lib/home";
-import { getHomeItems, type Media } from "./lib/sanity/queries";
+import { getHomeItems, getPreloaderImages, type Media } from "./lib/sanity/queries";
 import { sized } from "./lib/sanity/client";
 
 function toItem(m: Media, i: number): Item {
@@ -28,5 +28,17 @@ export default async function Home() {
     sanity && sanity.length ? sanity.map(toItem) : FALLBACK_ITEMS;
   const [colA, colB] = buildColumns(items);
 
-  return <HomeGrid items={items} colA={colA} colB={colB} />;
+  const preRaw = await getPreloaderImages();
+  const preloaderImages = preRaw
+    ? preRaw.map((i) => ({ src: sized(i.src, 1280), w: i.w, h: i.h }))
+    : undefined;
+
+  return (
+    <HomeGrid
+      items={items}
+      colA={colA}
+      colB={colB}
+      preloaderImages={preloaderImages}
+    />
+  );
 }

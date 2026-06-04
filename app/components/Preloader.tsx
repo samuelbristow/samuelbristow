@@ -8,17 +8,41 @@ gsap.registerPlugin(useGSAP);
 
 let played = false;
 
+type PreImg = { src: string; w: number; h: number };
+
 type Frame =
-  | { type: "pair"; imgs: [string, string] }
+  | { type: "pair"; imgs: string[] }
   | { type: "land"; img: string };
 
-const frames: Frame[] = [
+const FALLBACK_FRAMES: Frame[] = [
   { type: "pair", imgs: ["/assets/images/chanel/1.jpg", "/assets/images/tekinoktay-day/1.jpg"] },
   { type: "land", img: "/assets/images/overview/555_43.webp" },
   { type: "pair", imgs: ["/assets/images/calderalab/1.jpg", "/assets/images/chanel/2.jpg"] },
   { type: "land", img: "/assets/images/overview/260308_Tekinoktay_Day_134770_2.webp" },
   { type: "pair", imgs: ["/assets/images/tekinoktay-day/2.jpg", "/assets/images/calderalab/2.jpg"] },
 ];
+
+function buildFrames(images: PreImg[]): Frame[] {
+  const frames: Frame[] = [];
+  let pending: string | null = null;
+  for (const im of images) {
+    const ar = im.w / im.h;
+    if (ar > 1.2) {
+      if (pending) {
+        frames.push({ type: "pair", imgs: [pending] });
+        pending = null;
+      }
+      frames.push({ type: "land", img: im.src });
+    } else if (pending) {
+      frames.push({ type: "pair", imgs: [pending, im.src] });
+      pending = null;
+    } else {
+      pending = im.src;
+    }
+  }
+  if (pending) frames.push({ type: "pair", imgs: [pending] });
+  return frames;
+}
 
 function FrameView({ frame }: { frame: Frame }) {
   if (frame.type === "pair") {
@@ -68,11 +92,14 @@ function FrameView({ frame }: { frame: Frame }) {
   );
 }
 
-export function Preloader() {
+export function Preloader({ images }: { images?: PreImg[] }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const framesRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLSpanElement>(null);
   const [done, setDone] = useState(false);
+
+  const frames =
+    images && images.length ? buildFrames(images) : FALLBACK_FRAMES;
 
   useGSAP(
     () => {

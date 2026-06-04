@@ -9,6 +9,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Preloader } from "./Preloader";
 import { isFullWidth, type Item, type Placed } from "../lib/home";
 
+type PreImg = { src: string; w: number; h: number };
+
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 function MediaCard({ item, align }: { item: Item; align: string }) {
@@ -84,10 +86,12 @@ export function HomeGrid({
   items,
   colA,
   colB,
+  preloaderImages,
 }: {
   items: Item[];
   colA: Placed[];
   colB: Placed[];
+  preloaderImages?: PreImg[];
 }) {
   const mainRef = useRef<HTMLElement>(null);
 
@@ -116,7 +120,7 @@ export function HomeGrid({
       className="pt-[120px] md:pt-[180px] pb-[6em] md:pb-[10em]"
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
-      <Preloader />
+      <Preloader images={preloaderImages} />
       <div
         className="section-name sticky z-20 text-center pb-[2em] md:pb-[4em]"
         style={{ top: 0, paddingTop: "clamp(63px, 7.5vw, 93px)" }}
