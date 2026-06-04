@@ -31,8 +31,12 @@ export const FALLBACK_ITEMS: Item[] = [
 
 export const isFullWidth = (item: Item) => {
   if (item.type === "video") return true;
+  const ar = (item.width ?? 0) / (item.height ?? 1);
+  // A portrait image is never full-width, even if the "Full width" toggle
+  // was mistakenly left on — otherwise --item-w can't shrink it.
+  if (ar > 0 && ar < 1) return false;
   if (item.landscape) return true;
-  return item.width / item.height > 1.1;
+  return ar > 1.1;
 };
 
 export const itemAr = (item: Item) =>
