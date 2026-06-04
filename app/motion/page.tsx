@@ -44,6 +44,31 @@ const LIGHTBOX_CSS = `
 .lightbox:target{display:flex}
 `;
 
+// Play (with sound) only the video whose lightbox is open; pause/reset the rest.
+const LIGHTBOX_JS = `
+(function(){
+  function sync(){
+    var id = location.hash.replace('#','');
+    var vids = document.querySelectorAll('video[data-lbvideo]');
+    for (var i=0;i<vids.length;i++){
+      var v = vids[i];
+      var box = v.closest('.lightbox');
+      if (box && box.id === id){
+        v.muted = false;
+        var p = v.play();
+        if (p && p.catch) p.catch(function(){});
+      } else {
+        v.pause();
+        try { v.currentTime = 0; } catch(e){}
+      }
+    }
+  }
+  window.addEventListener('hashchange', sync);
+  window.addEventListener('load', sync);
+  sync();
+})();
+`;
+
 function HoverOverlay({ caption }: { caption?: string }) {
   if (!caption) return null;
   return (
@@ -145,11 +170,12 @@ function LightboxMedia({ item }: { item: Media }) {
   if (item.kind === "video") {
     return (
       <video
+        data-lbvideo
         src={item.src}
-        autoPlay
         loop
         playsInline
         controls
+        preload="metadata"
         style={{
           maxWidth: "100%",
           maxHeight: "100%",
@@ -320,6 +346,8 @@ export default async function Motion() {
       {allCells.map((cell, i) => (
         <Lightbox key={i} cell={cell} index={i} total={allCells.length} />
       ))}
+
+      <script dangerouslySetInnerHTML={{ __html: LIGHTBOX_JS }} />
     </main>
   );
 }
