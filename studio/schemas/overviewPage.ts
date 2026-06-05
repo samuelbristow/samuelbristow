@@ -6,12 +6,26 @@ export const overviewPage = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "cells",
+      name: "items",
       title: "Images",
       type: "array",
-      of: [{ type: "overviewCell" }],
+      of: [
+        {
+          type: "image",
+          title: "Image",
+          options: { hotspot: true },
+          fields: [
+            {
+              name: "caption",
+              title: "Hover text",
+              type: "string",
+            },
+          ],
+        },
+        { type: "overviewGroup" },
+      ],
       description:
-        "Drag to reorder. Each cell is one image, or a small group of 2–3.",
+        "Drag in multiple images at once — each becomes its own tile. Use “Group” to tie 2–3 images into a single tile. Drag to reorder.",
     }),
   ],
   preview: { prepare: () => ({ title: "Portfolio Overview" }) },
