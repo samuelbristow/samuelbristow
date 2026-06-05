@@ -29,9 +29,10 @@ export function packRows<T>(
 
   if (rows.length >= 2) {
     const last = rows[rows.length - 1];
-    const prev = rows[rows.length - 2];
-    while (last.cells.length < minN && prev.cells.length > minN) {
-      last.cells.unshift(prev.cells.pop()!);
+    const lastSumAr = last.cells.reduce((s, c) => s + c.ar, 0);
+    if (width / lastSumAr > maxH) {
+      rows[rows.length - 2].cells.push(...last.cells);
+      rows.pop();
     }
   }
 

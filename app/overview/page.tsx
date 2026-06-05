@@ -125,21 +125,30 @@ function MosaicGrid({
   rows,
   rowGap = ROW_GAP_PCT,
   rowMargin = ROW_MARGIN_PCT,
+  packWidth,
+  packGap,
+  maxH,
 }: {
   rows: Row[];
   rowGap?: number;
   rowMargin?: number;
+  packWidth: number;
+  packGap: number;
+  maxH: number;
 }) {
   let idx = 0;
   return (
     <>
       {rows.map((row, ri) => {
         const ar = row.ar / (1 - (rowGap / 100) * (row.cells.length - 1));
+        const naturalH = (packWidth - packGap * (row.cells.length - 1)) / row.ar;
+        const widthPct = naturalH > maxH ? (maxH / naturalH) * 100 : 100;
         return (
           <div
             key={ri}
-            className="flex w-full"
+            className="flex mr-auto"
             style={{
+              width: `${widthPct}%`,
               aspectRatio: ar,
               gap: `${rowGap}%`,
               marginBottom: `${rowMargin}%`,
@@ -340,11 +349,18 @@ export default async function Overview() {
       </div>
 
       <div className="px-3 md:hidden">
-        <MosaicGrid rows={mobileRows} rowGap={16} rowMargin={16} />
+        <MosaicGrid
+          rows={mobileRows}
+          rowGap={16}
+          rowMargin={16}
+          packWidth={390}
+          packGap={18}
+          maxH={260}
+        />
       </div>
 
       <div className="hidden md:block px-6 lg:px-10 max-w-[1400px] mx-auto">
-        <MosaicGrid rows={desktopRows} />
+        <MosaicGrid rows={desktopRows} packWidth={1280} packGap={64} maxH={340} />
       </div>
 
       {allCells.map((cell, i) => (
