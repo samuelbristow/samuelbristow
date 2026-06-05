@@ -22,10 +22,11 @@ export const overviewCell = defineType({
     }),
   ],
   preview: {
-    select: { media: "images.0", images: "images" },
-    prepare({ media, images }) {
+    select: { media: "images.0", images: "images", caption: "caption" },
+    prepare({ media, images, caption }) {
       const n = Array.isArray(images) ? images.length : 0;
-      return { title: n > 1 ? `Group of ${n}` : "Single image", media };
+      const type = n > 1 ? `Group of ${n}` : "Single image";
+      return { title: caption || type, subtitle: caption ? type : undefined, media };
     },
   },
 });

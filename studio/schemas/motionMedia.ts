@@ -53,9 +53,10 @@ export const motionMedia = defineType({
     }),
   ],
   preview: {
-    select: { media: "image", type: "type" },
-    prepare({ media, type }) {
-      return { title: type === "video" ? "Video" : "GIF / Image", media };
+    select: { media: "image", type: "type", caption: "caption" },
+    prepare({ media, type, caption }) {
+      const label = type === "video" ? "Video" : "GIF / Image";
+      return { title: caption || label, subtitle: caption ? label : undefined, media };
     },
   },
 });
