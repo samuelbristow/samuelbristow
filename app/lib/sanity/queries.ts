@@ -98,20 +98,13 @@ export async function getOverviewCells(): Promise<OverviewCell[] | null> {
   const raw = await safeFetch<
     { images: OverviewImg[]; caption?: string }[] | null
   >(
-    `*[_type=="overviewPage"][0].items[]{
+    `*[_type=="overviewPage"][0].cells[]{
       "caption": caption,
-      "images": select(
-        _type == "overviewGroup" => images[]{
-          "src": asset->url,
-          "w": asset->metadata.dimensions.width,
-          "h": asset->metadata.dimensions.height
-        },
-        [{
-          "src": asset->url,
-          "w": asset->metadata.dimensions.width,
-          "h": asset->metadata.dimensions.height
-        }]
-      )
+      "images": images[]{
+        "src": asset->url,
+        "w": asset->metadata.dimensions.width,
+        "h": asset->metadata.dimensions.height
+      }
     }`
   );
   if (!raw || raw.length === 0) return null;
