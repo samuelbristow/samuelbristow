@@ -96,31 +96,29 @@ export type OverviewCell = { images: OverviewImg[]; caption?: string };
 
 export async function getOverviewCells(): Promise<OverviewCell[] | null> {
   const raw = await safeFetch<
-    { images: OverviewImg[]; caption?: string }[] | null
+    { src?: string; w?: number; h?: number; caption?: string; group?: boolean }[] | null
   >(
     `*[_type=="overviewPage"][0].items[]{
+      "src": asset->url,
+      "w": asset->metadata.dimensions.width,
+      "h": asset->metadata.dimensions.height,
       "caption": caption,
-      "images": select(
-        _type == "overviewGroup" => images[]{
-          "src": asset->url,
-          "w": asset->metadata.dimensions.width,
-          "h": asset->metadata.dimensions.height
-        },
-        [{
-          "src": asset->url,
-          "w": asset->metadata.dimensions.width,
-          "h": asset->metadata.dimensions.height
-        }]
-      )
+      "group": groupWithPrevious
     }`
   );
   if (!raw || raw.length === 0) return null;
-  return raw
-    .map((c) => ({
-      images: (c.images || []).filter((i) => i.src && i.w && i.h),
-      caption: c.caption,
-    }))
-    .filter((c) => c.images.length > 0);
+  const cells: OverviewCell[] = [];
+  for (const it of raw) {
+    if (!it.src || !it.w || !it.h) continue;
+    const img: OverviewImg = { src: it.src, w: it.w, h: it.h };
+    const last = cells[cells.length - 1];
+    if (it.group && last && last.images.length < 3) {
+      last.images.push(img);
+    } else {
+      cells.push({ images: [img], caption: it.caption });
+    }
+  }
+  return cells.filter((c) => c.images.length > 0);
 }
 
 export type AboutData = {
