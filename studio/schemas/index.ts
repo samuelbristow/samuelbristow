@@ -1,5 +1,5 @@
 import { homeMedia } from "./homeMedia";
-import { overviewCell } from "./overviewCell";
+import { overviewGroup } from "./overviewGroup";
 import { motionMedia } from "./motionMedia";
 import { homePage } from "./homePage";
 import { overviewPage } from "./overviewPage";
@@ -11,7 +11,7 @@ import { siteSettings } from "./siteSettings";
 
 export const schemaTypes = [
   homeMedia,
-  overviewCell,
+  overviewGroup,
   motionMedia,
   homePage,
   overviewPage,
