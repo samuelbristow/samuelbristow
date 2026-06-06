@@ -35,6 +35,14 @@ export const homeMedia = defineType({
       hidden: ({ parent }) => parent?.type !== "video",
     }),
     defineField({
+      name: "poster",
+      title: "Thumbnail",
+      type: "image",
+      options: { hotspot: true },
+      description: "A still to represent this video in the Studio list.",
+      hidden: ({ parent }) => parent?.type !== "video",
+    }),
+    defineField({
       name: "width",
       title: "Width (video only)",
       type: "number",
@@ -71,9 +79,14 @@ export const homeMedia = defineType({
     }),
   ],
   preview: {
-    select: { media: "image", type: "type" },
-    prepare({ media, type }) {
-      return { title: type === "video" ? "Video" : "Image", media };
+    select: { image: "image", poster: "poster", type: "type", caption: "caption" },
+    prepare({ image, poster, type, caption }) {
+      const label = type === "video" ? "Video" : "Image";
+      return {
+        title: caption || label,
+        subtitle: caption ? label : undefined,
+        media: type === "video" ? poster : image,
+      };
     },
   },
 });

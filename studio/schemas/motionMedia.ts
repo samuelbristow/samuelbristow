@@ -35,6 +35,14 @@ export const motionMedia = defineType({
       hidden: ({ parent }) => parent?.type === "video",
     }),
     defineField({
+      name: "poster",
+      title: "Thumbnail",
+      type: "image",
+      options: { hotspot: true },
+      description: "A still to represent this video in the Studio list.",
+      hidden: ({ parent }) => parent?.type !== "video",
+    }),
+    defineField({
       name: "width",
       title: "Width",
       type: "number",
@@ -53,10 +61,14 @@ export const motionMedia = defineType({
     }),
   ],
   preview: {
-    select: { media: "image", type: "type", caption: "caption" },
-    prepare({ media, type, caption }) {
+    select: { image: "image", poster: "poster", type: "type", caption: "caption" },
+    prepare({ image, poster, type, caption }) {
       const label = type === "video" ? "Video" : "GIF / Image";
-      return { title: caption || label, subtitle: caption ? label : undefined, media };
+      return {
+        title: caption || label,
+        subtitle: caption ? label : undefined,
+        media: type === "video" ? poster : image,
+      };
     },
   },
 });
