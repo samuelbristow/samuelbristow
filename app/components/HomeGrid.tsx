@@ -35,7 +35,7 @@ function MediaCard({ item, align }: { item: Item; align: string }) {
         ) : (
           <Image
             src={item.image}
-            alt=""
+            alt={item.caption || "Still life photograph by Samuel Bristow"}
             width={item.width}
             height={item.height}
             unoptimized={item.type === "gif"}

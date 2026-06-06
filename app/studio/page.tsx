@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
 import { getStudio } from "../lib/sanity/queries";
 import { sized } from "../lib/sanity/client";
+
+export const metadata: Metadata = {
+  title: "Studio",
+  description:
+    "Samuel Bristow's New York still life studio — approach, services and contact for product, beauty and fragrance commissions and collaborations.",
+  alternates: { canonical: "/studio" },
+  openGraph: {
+    title: "Studio — Samuel Bristow",
+    description:
+      "Samuel Bristow's New York still life studio — approach, services and contact for product, beauty and fragrance commissions and collaborations.",
+    url: "/studio",
+  },
+};
 
 const FALLBACK = {
   images: [
@@ -62,7 +76,7 @@ export default async function Studio() {
             <img
               key={img.src}
               src={img.src}
-              alt=""
+              alt="Inside Samuel Bristow's New York still life studio"
               width={img.w}
               height={img.h}
               decoding="async"

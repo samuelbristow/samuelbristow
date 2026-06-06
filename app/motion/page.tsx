@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   desktopRows as fbDesktopRows,
   mobileRows as fbMobileRows,
@@ -108,7 +109,7 @@ function MediaTile({ item }: { item: Media }) {
   return (
     <img
       src={item.src}
-      alt=""
+      alt="Motion still by Samuel Bristow"
       loading="lazy"
       decoding="async"
       style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -198,7 +199,7 @@ function LightboxMedia({ item }: { item: Media }) {
   return (
     <img
       src={item.src}
-      alt=""
+      alt="Motion still by Samuel Bristow"
       loading="lazy"
       decoding="async"
       style={{
@@ -308,6 +309,19 @@ function Lightbox({
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Motion",
+  description:
+    "Motion and film work by still life photographer and director Samuel Bristow — fragrance, beauty and product films crafted in New York.",
+  alternates: { canonical: "/motion" },
+  openGraph: {
+    title: "Motion — Samuel Bristow",
+    description:
+      "Motion and film work by still life photographer and director Samuel Bristow — fragrance, beauty and product films crafted in New York.",
+    url: "/motion",
+  },
+};
 
 export default async function Motion() {
   const sanityItems = await getMotionItems();

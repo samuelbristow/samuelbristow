@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { getAbout } from "../lib/sanity/queries";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Samuel Bristow is a still life photographer and director based in New York City, transforming the everyday into the extraordinary through thoughtful composition and detail.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About — Samuel Bristow",
+    description:
+      "Samuel Bristow is a still life photographer and director based in New York City, transforming the everyday into the extraordinary through thoughtful composition and detail.",
+    url: "/about",
+  },
+};
 
 const FALLBACK_CLIENTS = [
   "Calvin Klein",

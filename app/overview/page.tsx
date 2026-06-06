@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import {
   desktopRows as fbDesktopRows,
@@ -77,7 +78,7 @@ function ImageTile({ item }: { item: Item }) {
   return (
     <Image
       src={item.src}
-      alt=""
+      alt="Still life photograph by Samuel Bristow"
       width={item.w}
       height={item.h}
       style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -169,7 +170,7 @@ function LightboxImage({ item }: { item: Item }) {
   return (
     <img
       src={item.src}
-      alt=""
+      alt="Still life photograph by Samuel Bristow"
       loading="lazy"
       decoding="async"
       style={{
@@ -276,7 +277,7 @@ function Lightbox({
               >
                 <img
                   src={it.src}
-                  alt=""
+                  alt="Still life photograph by Samuel Bristow"
                   loading="lazy"
                   decoding="async"
                   style={{
@@ -313,6 +314,19 @@ function Lightbox({
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Portfolio Overview",
+  description:
+    "Browse the complete portfolio of still life, product, beauty and fragrance photography by New York–based photographer and director Samuel Bristow.",
+  alternates: { canonical: "/overview" },
+  openGraph: {
+    title: "Portfolio Overview — Samuel Bristow",
+    description:
+      "Browse the complete portfolio of still life, product, beauty and fragrance photography by New York–based photographer and director Samuel Bristow.",
+    url: "/overview",
+  },
+};
 
 export default async function Overview() {
   const sanityCells = await getOverviewCells();
