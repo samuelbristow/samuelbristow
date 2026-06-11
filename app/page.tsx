@@ -10,8 +10,12 @@ import { StudioSection } from "./studio/page";
 function toItem(m: Media, i: number): Item {
   const id = `home-${i}`;
   const href = m.link || "#";
+  const gallery =
+    m.gallery && m.gallery.length
+      ? m.gallery.map((g) => ({ src: sized(g.src, 1600), w: g.w, h: g.h }))
+      : undefined;
   if (m.type === "video") {
-    return { type: "video", id, href, src: m.src, width: m.width, height: m.height, landscape: m.landscape, caption: m.caption };
+    return { type: "video", id, href, src: m.src, width: m.width, height: m.height, landscape: m.landscape, caption: m.caption, gallery };
   }
   const isGif = /\.gif($|\?)/i.test(m.src);
   return {
@@ -23,6 +27,7 @@ function toItem(m: Media, i: number): Item {
     height: m.height,
     landscape: m.landscape,
     caption: m.caption,
+    gallery,
   };
 }
 

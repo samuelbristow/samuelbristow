@@ -14,6 +14,8 @@ async function safeFetch<T>(query: string): Promise<T | null> {
   }
 }
 
+export type GalleryImg = { src: string; w: number; h: number };
+
 export type Media = {
   type: "image" | "video";
   src: string;
@@ -22,6 +24,7 @@ export type Media = {
   landscape?: boolean;
   link?: string;
   caption?: string;
+  gallery?: GalleryImg[];
 };
 
 type RawMedia = {
@@ -35,9 +38,11 @@ type RawMedia = {
   vidUrl?: string;
   vidW?: number;
   vidH?: number;
+  gallery?: GalleryImg[];
 };
 
 function normalize(d: RawMedia): Media | null {
+  const gallery = (d.gallery || []).filter((g) => g.src && g.w && g.h);
   if (d.type === "video") {
     if (!d.vidUrl) return null;
     return {
@@ -48,6 +53,7 @@ function normalize(d: RawMedia): Media | null {
       landscape: d.landscape ?? true,
       link: d.link,
       caption: d.caption,
+      gallery,
     };
   }
   if (!d.imgUrl || !d.imgW || !d.imgH) return null;
@@ -59,6 +65,7 @@ function normalize(d: RawMedia): Media | null {
     landscape: d.landscape,
     link: d.link,
     caption: d.caption,
+    gallery,
   };
 }
 
@@ -72,7 +79,12 @@ const MEDIA_PROJECTION = `{
   "imgH": image.asset->metadata.dimensions.height,
   "vidUrl": video.asset->url,
   "vidW": width,
-  "vidH": height
+  "vidH": height,
+  "gallery": gallery[]{
+    "src": asset->url,
+    "w": asset->metadata.dimensions.width,
+    "h": asset->metadata.dimensions.height
+  }
 }`;
 
 export async function getHomeItems(): Promise<Media[] | null> {

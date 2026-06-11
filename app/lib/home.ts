@@ -1,7 +1,9 @@
+export type GalleryImg = { src: string; w: number; h: number };
+
 export type Item =
-  | { type: "image"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean; caption?: string }
-  | { type: "gif"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean; caption?: string }
-  | { type: "video"; id: string; href: string; src: string; width?: number; height?: number; landscape?: boolean; caption?: string };
+  | { type: "image"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean; caption?: string; gallery?: GalleryImg[] }
+  | { type: "gif"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean; caption?: string; gallery?: GalleryImg[] }
+  | { type: "video"; id: string; href: string; src: string; width?: number; height?: number; landscape?: boolean; caption?: string; gallery?: GalleryImg[] };
 
 export type Placed = { item: Item; align: string };
 

@@ -71,6 +71,14 @@ export const homeMedia = defineType({
         "Shown over the media on hover (and below it on mobile). Leave blank for no label.",
     }),
     defineField({
+      name: "gallery",
+      title: "Related images (lightbox)",
+      type: "array",
+      of: [{ type: "image", options: { hotspot: true } }],
+      description:
+        "Optional. When you add images here, clicking this item opens a grid of these images. Drag multiple in at once. Takes priority over the link below.",
+    }),
+    defineField({
       name: "link",
       title: "Link (optional)",
       type: "url",
