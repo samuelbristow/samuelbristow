@@ -98,10 +98,11 @@ function MediaTile({ item }: { item: Media }) {
     return (
       <video
         src={item.src}
-        autoPlay
+        data-grid-video
         muted
         loop
         playsInline
+        preload="none"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
     );

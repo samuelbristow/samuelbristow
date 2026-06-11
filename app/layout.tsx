@@ -137,6 +137,23 @@ const scrollScript = `(function(){
 
 const preloaderScript = `setTimeout(function(){var p=document.getElementById('preloader');if(p){p.style.transition='opacity .5s ease';p.style.opacity='0';setTimeout(function(){if(p)p.style.display='none';},520);}document.body.style.overflow='';},5500);`;
 
+const lazyVideoScript = `(function(){
+  function setup(){
+    var vids=document.querySelectorAll('video[data-grid-video]');
+    if(!('IntersectionObserver' in window)){for(var i=0;i<vids.length;i++){var p=vids[i].play();if(p&&p.catch)p.catch(function(){});}return;}
+    var io=new IntersectionObserver(function(entries){
+      for(var i=0;i<entries.length;i++){
+        var v=entries[i].target;
+        if(entries[i].isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+        else{v.pause();}
+      }
+    },{rootMargin:'300px 0px'});
+    for(var i=0;i<vids.length;i++){io.observe(vids[i]);}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);
+  else setup();
+})();`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -155,6 +172,7 @@ export default async function RootLayout({
       <body suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: scrollScript }} />
         <script dangerouslySetInnerHTML={{ __html: preloaderScript }} />
+        <script dangerouslySetInnerHTML={{ __html: lazyVideoScript }} />
         <Nav instagramUrl={instagramUrl} />
         <div>
           {children}

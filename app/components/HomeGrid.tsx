@@ -25,10 +25,11 @@ function MediaCard({ item, align }: { item: Item; align: string }) {
         {item.type === "video" ? (
           <video
             src={item.src}
-            autoPlay
+            data-grid-video
             muted
             loop
             playsInline
+            preload="none"
             style={{ width: "100%", height: "auto" }}
             className="block"
           />

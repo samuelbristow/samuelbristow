@@ -80,6 +80,7 @@ export async function StudioSection({ id }: { id?: string }) {
               alt="Inside Samuel Bristow's New York still life studio"
               width={img.w}
               height={img.h}
+              loading="lazy"
               decoding="async"
               style={{ width: "100%", height: "auto" }}
               className="block"
