@@ -16,6 +16,8 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const HLB_CSS = `
 .hlb{position:fixed;inset:0;z-index:70;display:none;overflow-y:auto;background-color:var(--white-smoke)}
 .hlb:target{display:block}
+.hlb-one{position:fixed;inset:0;z-index:70;display:none;background-color:var(--white-smoke)}
+.hlb-one:target{display:block}
 `;
 
 function MediaCard({ item, align }: { item: Item; align: string }) {
@@ -99,53 +101,140 @@ function MediaCard({ item, align }: { item: Item; align: string }) {
   );
 }
 
+const LB_TITLE_STYLE: React.CSSProperties = {
+  fontFamily: '"psfournier-std", serif',
+  fontWeight: 300,
+  fontSize: "clamp(14px, 1.4vw, 18px)",
+  letterSpacing: "0.15em",
+};
+
 function GalleryLightbox({ item }: { item: Item }) {
   const gallery = item.gallery;
   if (!gallery || !gallery.length) return null;
-  return (
-    <div id={`home-lb-${item.id}`} className="hlb">
-      <div
-        className="sticky top-0 z-10 flex items-center justify-between px-5 md:px-10 lg:px-[120px] py-4"
-        style={{ backgroundColor: "var(--white-smoke)" }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--font-bodoni), serif",
-            fontSize: "clamp(13px, 1.3vw, 16px)",
-            letterSpacing: "0.01em",
-          }}
-        >
-          <strong style={{ fontWeight: 600 }}>Samuel Bristow</strong>
+  const base = `home-lb-${item.id}`;
+  const total = gallery.length;
+
+  const header = (
+    toggleHref: string,
+    toggleLabel: string,
+    absolute = false
+  ) => (
+    <div
+      className={`${
+        absolute ? "absolute top-0 left-0 right-0" : "sticky top-0"
+      } z-30 px-5 md:px-10 lg:px-[120px] py-4 pointer-events-none`}
+      style={{ backgroundColor: "var(--white-smoke)" }}
+    >
+      <div className="relative flex items-center justify-between gap-4">
+        <span style={LB_TITLE_STYLE}>
+          Samuel<span style={{ marginLeft: "0.15em" }}>Bristow</span>
           {item.caption ? (
-            <span style={{ opacity: 0.6 }}> / {item.caption}</span>
+            <span
+              style={{
+                fontFamily: "var(--font-bodoni), serif",
+                letterSpacing: "0.02em",
+                opacity: 0.55,
+                marginLeft: "0.5em",
+              }}
+            >
+              / {item.caption}
+            </span>
           ) : null}
         </span>
         <a
           href="#!"
           aria-label="Close"
-          className="leading-none hover:opacity-60 transition-opacity"
+          className="pointer-events-auto leading-none hover:opacity-60 transition-opacity"
           style={{ fontFamily: "var(--font-bodoni), serif", fontSize: "30px" }}
         >
           ×
         </a>
       </div>
-
-      <div className="px-5 md:px-10 lg:px-[120px] pb-[6em] grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 max-w-[1400px] mx-auto">
-        {gallery.map((g, i) => (
-          <img
-            key={i}
-            src={g.src}
-            alt={item.caption || "Samuel Bristow photograph"}
-            width={g.w}
-            height={g.h}
-            loading="lazy"
-            decoding="async"
-            style={{ width: "100%", height: "auto" }}
-            className="block"
-          />
-        ))}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <a
+          href={toggleHref}
+          className="pointer-events-auto hover:opacity-60 transition-opacity whitespace-nowrap"
+          style={LB_TITLE_STYLE}
+        >
+          {toggleLabel}
+        </a>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      <div id={base} className="hlb">
+        {header(`#${base}-0`, "Single")}
+        <div className="px-5 md:px-10 lg:px-[120px] pb-[6em] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-[1400px] mx-auto">
+          {gallery.map((g, i) => (
+            <a key={i} href={`#${base}-${i}`} className="block">
+              <img
+                src={g.src}
+                alt={item.caption || "Samuel Bristow photograph"}
+                width={g.w}
+                height={g.h}
+                loading="lazy"
+                decoding="async"
+                style={{ width: "100%", height: "auto" }}
+                className="block"
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {gallery.map((g, i) => {
+        const prev = (i - 1 + total) % total;
+        const next = (i + 1) % total;
+        return (
+          <div key={i} id={`${base}-${i}`} className="hlb-one">
+            {header(`#${base}`, "All", true)}
+            <a
+              href={`#${base}-${prev}`}
+              aria-label="Previous"
+              className="absolute top-0 left-0 z-20"
+              style={{ width: "30%", height: "100%" }}
+            />
+            <a
+              href={`#${base}-${next}`}
+              aria-label="Next"
+              className="absolute top-0 right-0 z-20"
+              style={{ width: "30%", height: "100%" }}
+            />
+            <div
+              className="absolute left-0 right-0 flex items-center justify-center px-5 md:px-[120px] pointer-events-none"
+              style={{ top: "70px", bottom: "70px" }}
+            >
+              <img
+                src={g.src}
+                alt={item.caption || "Samuel Bristow photograph"}
+                loading="lazy"
+                decoding="async"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 z-30 text-center pointer-events-none py-4">
+              <span
+                style={{
+                  fontFamily: "var(--font-bodoni), serif",
+                  fontSize: "clamp(12px, 1.2vw, 15px)",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </>
   );
 }
 
