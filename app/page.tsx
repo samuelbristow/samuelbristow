@@ -2,6 +2,10 @@ import { HomeGrid } from "./components/HomeGrid";
 import { buildColumns, FALLBACK_ITEMS, type Item } from "./lib/home";
 import { getHomeItems, getPreloaderImages, type Media } from "./lib/sanity/queries";
 import { sized } from "./lib/sanity/client";
+import { OverviewSection } from "./overview/page";
+import { MotionSection } from "./motion/page";
+import { AboutSection } from "./about/page";
+import { StudioSection } from "./studio/page";
 
 function toItem(m: Media, i: number): Item {
   const id = `home-${i}`;
@@ -34,11 +38,17 @@ export default async function Home() {
     : undefined;
 
   return (
-    <HomeGrid
-      items={items}
-      colA={colA}
-      colB={colB}
-      preloaderImages={preloaderImages}
-    />
+    <main>
+      <HomeGrid
+        items={items}
+        colA={colA}
+        colB={colB}
+        preloaderImages={preloaderImages}
+      />
+      <OverviewSection id="overview" />
+      <MotionSection id="motion" />
+      <AboutSection id="about" />
+      <StudioSection id="studio" />
+    </main>
   );
 }

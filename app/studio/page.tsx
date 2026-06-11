@@ -34,7 +34,7 @@ const FALLBACK = {
   email: "info@samuelbristow.com",
 };
 
-export default async function Studio() {
+export async function StudioSection({ id }: { id?: string }) {
   const data = await getStudio();
 
   const images =
@@ -49,7 +49,8 @@ export default async function Studio() {
   const telHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
 
   return (
-    <main
+    <section
+      id={id}
       className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em]"
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
@@ -130,6 +131,14 @@ export default async function Studio() {
           </div>
         </div>
       </div>
+    </section>
+  );
+}
+
+export default function StudioPage() {
+  return (
+    <main>
+      <StudioSection />
     </main>
   );
 }

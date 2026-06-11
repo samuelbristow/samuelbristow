@@ -152,7 +152,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: scrollScript }} />
         <script dangerouslySetInnerHTML={{ __html: preloaderScript }} />
         <Nav instagramUrl={instagramUrl} />

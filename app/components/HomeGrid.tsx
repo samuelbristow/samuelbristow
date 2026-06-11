@@ -115,7 +115,8 @@ export function HomeGrid({
   );
 
   return (
-    <main
+    <section
+      id="latest"
       ref={mainRef}
       className="pt-[120px] md:pt-[180px] pb-[6em] md:pb-[10em]"
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
@@ -156,6 +157,6 @@ export function HomeGrid({
           ))}
         </div>
       </div>
-    </main>
+    </section>
   );
 }

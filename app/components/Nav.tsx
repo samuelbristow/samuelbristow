@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 type NavLink = { label: string; href: string; external?: boolean };
 
 const DEFAULT_INSTAGRAM = "https://www.instagram.com/samuelbristow.photo/";
@@ -16,20 +13,49 @@ const NAV_FONT: React.CSSProperties = {
 };
 
 export function Nav({ instagramUrl }: { instagramUrl?: string }) {
-  const pathname = usePathname();
-
   const rows: NavLink[][] = [
     [
-      { label: "Latest Series", href: "/" },
-      { label: "Portfolio Overview", href: "/overview" },
-      { label: "Motion", href: "/motion" },
+      { label: "Latest Series", href: "/#latest" },
+      { label: "Portfolio Overview", href: "/#overview" },
+      { label: "Motion", href: "/#motion" },
     ],
     [
-      { label: "About", href: "/about" },
-      { label: "Studio", href: "/studio" },
+      { label: "About", href: "/#about" },
+      { label: "Studio", href: "/#studio" },
       { label: "Instagram", href: instagramUrl || DEFAULT_INSTAGRAM, external: true },
     ],
   ];
+
+  const scrollToHash = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    const hashIndex = href.indexOf("#");
+    if (hashIndex === -1) return;
+    const id = href.slice(hashIndex + 1);
+    const el = document.getElementById(id);
+    if (!el) return; // section not on this page — let the browser navigate
+    e.preventDefault();
+
+    const startY = window.scrollY;
+    const targetY = el.getBoundingClientRect().top + startY;
+    const distance = targetY - startY;
+    if (Math.abs(distance) < 2) return;
+
+    const duration = 1400;
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    let startTime: number | null = null;
+    const step = (now: number) => {
+      if (startTime === null) startTime = now;
+      const t = Math.min((now - startTime) / duration, 1);
+      window.scrollTo(0, startY + distance * easeInOutCubic(t));
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    window.history.pushState(null, "", `#${id}`);
+  };
 
   const renderLink = (link: NavLink) => {
     if (link.external) {
@@ -45,22 +71,23 @@ export function Nav({ instagramUrl }: { instagramUrl?: string }) {
         </a>
       );
     }
-    const active = pathname === link.href;
     return (
-      <Link
+      <a
         key={link.href}
         href={link.href}
-        className={`hover:opacity-60 transition-opacity duration-200${active ? " opacity-100" : ""}`}
+        onClick={(e) => scrollToHash(e, link.href)}
+        className="hover:opacity-60 transition-opacity duration-200"
       >
         {link.label}
-      </Link>
+      </a>
     );
   };
 
   return (
     <div className="nav-root fixed z-40 top-0 left-1/2 -translate-x-1/2 flex flex-col items-center pt-5 md:pt-7">
-      <Link
-        href="/"
+      <a
+        href="/#latest"
+        onClick={(e) => scrollToHash(e, "/#latest")}
         id="brand-logo"
         aria-label="Samuel Bristow"
         className="block text-[var(--fg)] leading-none text-center whitespace-nowrap"
@@ -73,7 +100,7 @@ export function Nav({ instagramUrl }: { instagramUrl?: string }) {
         }}
       >
         Samuel<span style={{ marginLeft: "0.15em" }}>Bristow</span>
-      </Link>
+      </a>
 
       <nav
         className="nav-full flex flex-col items-center gap-y-1 mt-2 md:mt-3 text-[var(--fg)]"

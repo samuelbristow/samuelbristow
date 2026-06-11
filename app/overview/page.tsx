@@ -91,7 +91,7 @@ function CellTile({ cell, cellIdx }: { cell: Cell; cellIdx: number }) {
   if (cell.type === "single") {
     return (
       <a
-        href={`#lb-${cellIdx}`}
+        href={`#ov-lb-${cellIdx}`}
         className="group/card relative overflow-hidden block h-full min-w-0"
         style={{ flex: `${cell.ar} 0 0` }}
       >
@@ -103,7 +103,7 @@ function CellTile({ cell, cellIdx }: { cell: Cell; cellIdx: number }) {
   }
   return (
     <a
-      href={`#lb-${cellIdx}`}
+      href={`#ov-lb-${cellIdx}`}
       className="group/card relative flex h-full min-w-0"
       style={{ flex: `${cell.ar} 0 0`, gap: `${GROUP_GAP_PCT}%` }}
     >
@@ -200,7 +200,7 @@ function Lightbox({
     "absolute z-30 flex items-center justify-center text-[var(--brand-black)] no-underline";
 
   return (
-    <div id={`lb-${index}`} className="lightbox">
+    <div id={`ov-lb-${index}`} className="lightbox">
       <div
         className="absolute top-0 left-0 right-0 z-30 text-center pointer-events-none"
         style={{
@@ -225,13 +225,13 @@ function Lightbox({
       </div>
 
       <a
-        href={`#lb-${prev}`}
+        href={`#ov-lb-${prev}`}
         aria-label="Previous"
         className={`${btnBase} top-0 left-0`}
         style={{ width: "30%", height: "100%" }}
       />
       <a
-        href={`#lb-${next}`}
+        href={`#ov-lb-${next}`}
         aria-label="Next"
         className={`${btnBase} top-0 right-0`}
         style={{ width: "30%", height: "100%" }}
@@ -328,7 +328,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Overview() {
+export async function OverviewSection({ id }: { id?: string }) {
   const sanityCells = await getOverviewCells();
   const { desktopRows, mobileRows, allCells } = sanityCells
     ? buildFromSanity(sanityCells)
@@ -339,7 +339,8 @@ export default async function Overview() {
       };
 
   return (
-    <main
+    <section
+      id={id}
       className="pt-[88px] md:pt-[130px] pb-[6em] md:pb-[10em]"
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
@@ -380,6 +381,14 @@ export default async function Overview() {
       {allCells.map((cell, i) => (
         <Lightbox key={i} cell={cell} index={i} total={allCells.length} />
       ))}
+    </section>
+  );
+}
+
+export default function OverviewPage() {
+  return (
+    <main>
+      <OverviewSection />
     </main>
   );
 }

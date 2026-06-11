@@ -65,7 +65,13 @@ const ptComponents: PortableTextComponents = {
   },
 };
 
-export default async function About() {
+export async function AboutSection({
+  id,
+  standalone = false,
+}: {
+  id?: string;
+  standalone?: boolean;
+}) {
   const data = await getAbout();
 
   const representation = data?.representation || FALLBACK.representation;
@@ -79,10 +85,34 @@ export default async function About() {
   const telHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
 
   return (
-    <main
-      className="about-page min-h-[100svh] flex flex-col items-center justify-center text-center px-6 pt-[120px] md:pt-[150px] pb-[2em]"
+    <section
+      id={id}
+      className={
+        standalone
+          ? "about-page min-h-[100svh] flex flex-col items-center justify-center text-center px-6 pt-[120px] md:pt-[150px] pb-[2em]"
+          : "min-h-[100svh] flex flex-col text-center px-6 pb-[2em]"
+      }
       style={{ backgroundColor: "var(--white-smoke)", color: "var(--brand-black)" }}
     >
+      {!standalone && (
+        <div
+          className="section-name sticky z-20 text-center pb-[1em] md:pb-[2em]"
+          style={{ top: 0, paddingTop: "clamp(63px, 7.5vw, 93px)" }}
+        >
+          <span
+            style={{
+              fontFamily: '"psfournier-std", serif',
+              fontSize: "clamp(18px, 1.7vw, 23px)",
+              fontWeight: 300,
+              letterSpacing: "0.01em",
+              lineHeight: "1.6",
+            }}
+          >
+            About
+          </span>
+        </div>
+      )}
+
       <div className="max-w-[720px] mx-auto">
         <div
           className="flex flex-col gap-3"
@@ -153,6 +183,14 @@ export default async function About() {
           {copyright}
         </p>
       </div>
+    </section>
+  );
+}
+
+export default function AboutPage() {
+  return (
+    <main>
+      <AboutSection standalone />
     </main>
   );
 }
