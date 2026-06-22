@@ -13,7 +13,7 @@ function toItem(m: Media, i: number): Item {
   const gallery =
     m.gallery && m.gallery.length
       ? m.gallery.map((g) => ({
-          thumb: sized(g.src, 700),
+          thumb: sized(g.src, 600, 60),
           src: sized(g.src, 1600),
           w: g.w,
           h: g.h,

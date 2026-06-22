@@ -13,9 +13,10 @@ export const sanity: SanityClient | null = sanityEnabled
     })
   : null;
 
-export function sized(url: string, w: number): string {
+export function sized(url: string, w: number, q?: number): string {
   if (!url) return url;
   if (/\.gif($|\?)/i.test(url)) return url;
   const sep = url.includes("?") ? "&" : "?";
-  return `${url}${sep}w=${w}&auto=format&fit=max`;
+  const quality = q ? `&q=${q}` : "";
+  return `${url}${sep}w=${w}&auto=format&fit=max${quality}`;
 }
