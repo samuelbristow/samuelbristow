@@ -1,4 +1,5 @@
 import { defineType, defineField } from "sanity";
+import { BatchImageInput } from "../components/BatchImageInput";
 
 export const homeMedia = defineType({
   name: "homeMedia",
@@ -75,8 +76,9 @@ export const homeMedia = defineType({
       title: "Related images (lightbox)",
       type: "array",
       of: [{ type: "image", options: { hotspot: true } }],
+      components: { input: BatchImageInput },
       description:
-        "Optional. When you add images here, clicking this item opens a grid of these images. Drag multiple in at once. Takes priority over the link below.",
+        "Optional. When you add images here, clicking this item opens a grid of these images. Use the “Upload multiple images” button to bulk-add. Takes priority over the link below.",
     }),
     defineField({
       name: "link",

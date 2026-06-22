@@ -170,7 +170,7 @@ function GalleryLightbox({ item }: { item: Item }) {
           {gallery.map((g, i) => (
             <a key={i} href={`#${base}-${i}`} className="block">
               <img
-                src={g.src}
+                src={g.thumb}
                 alt={item.caption || "Samuel Bristow photograph"}
                 width={g.w}
                 height={g.h}

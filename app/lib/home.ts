@@ -1,4 +1,4 @@
-export type GalleryImg = { src: string; w: number; h: number };
+export type GalleryImg = { thumb: string; src: string; w: number; h: number };
 
 export type Item =
   | { type: "image"; id: string; href: string; image: string; width: number; height: number; landscape?: boolean; caption?: string; gallery?: GalleryImg[] }
