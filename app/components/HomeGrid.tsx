@@ -14,7 +14,7 @@ type PreImg = { src: string; w: number; h: number };
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const HLB_CSS = `
-.hlb{position:fixed;inset:0;z-index:70;display:none;overflow-y:auto;background-color:var(--white-smoke)}
+.hlb{position:fixed;inset:0;z-index:70;display:none;overflow-y:auto;overscroll-behavior:contain;background-color:var(--white-smoke)}
 .hlb:target{display:block}
 .hlb-one{position:fixed;inset:0;z-index:70;display:none;background-color:var(--white-smoke)}
 .hlb-one:target{display:block}
@@ -22,7 +22,7 @@ const HLB_CSS = `
 
 function MediaCard({ item, align }: { item: Item; align: string }) {
   const full = isFullWidth(item);
-  const hasGallery = !!(item.gallery && item.gallery.length);
+  const opensLightbox = !!(item.gallery && item.gallery.length) || item.type !== "video";
   const cls = `group/card relative block mx-auto ${align}`;
   const styleW = {
     width: full ? "var(--item-w-full, 92%)" : "var(--item-w, 75%)",
@@ -73,7 +73,7 @@ function MediaCard({ item, align }: { item: Item; align: string }) {
 
   return (
     <div data-item className="mb-[6em] md:mb-[12em] lg:mb-[15em]">
-      {hasGallery ? (
+      {opensLightbox ? (
         <a href={`#home-lb-${item.id}`} className={cls} style={styleW}>
           {media}
         </a>
@@ -108,17 +108,16 @@ const LB_TITLE_STYLE: React.CSSProperties = {
   letterSpacing: "0.15em",
 };
 
-function GalleryLightbox({ item }: { item: Item }) {
-  const gallery = item.gallery;
-  if (!gallery || !gallery.length) return null;
-  const base = `home-lb-${item.id}`;
-  const total = gallery.length;
-
-  const header = (
-    toggleHref: string,
-    toggleLabel: string,
-    absolute = false
-  ) => (
+function LightboxHeader({
+  caption,
+  absolute = false,
+  toggle,
+}: {
+  caption?: string;
+  absolute?: boolean;
+  toggle?: { href: string; label: string };
+}) {
+  return (
     <div
       className={`${
         absolute ? "absolute top-0 left-0 right-0" : "sticky top-0"
@@ -128,7 +127,7 @@ function GalleryLightbox({ item }: { item: Item }) {
       <div className="relative flex items-center justify-between gap-4">
         <span style={LB_TITLE_STYLE}>
           Samuel<span style={{ marginLeft: "0.15em" }}>Bristow</span>
-          {item.caption ? (
+          {caption ? (
             <span
               style={{
                 fontFamily: "var(--font-bodoni), serif",
@@ -137,7 +136,7 @@ function GalleryLightbox({ item }: { item: Item }) {
                 marginLeft: "0.5em",
               }}
             >
-              / {item.caption}
+              / {caption}
             </span>
           ) : null}
         </span>
@@ -150,27 +149,40 @@ function GalleryLightbox({ item }: { item: Item }) {
           ×
         </a>
       </div>
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <a
-          href={toggleHref}
-          className="pointer-events-auto hover:opacity-60 transition-opacity whitespace-nowrap"
-          style={LB_TITLE_STYLE}
-        >
-          {toggleLabel}
-        </a>
-      </div>
+      {toggle ? (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <a
+            href={toggle.href}
+            className="pointer-events-auto hover:opacity-60 transition-opacity whitespace-nowrap"
+            style={LB_TITLE_STYLE}
+          >
+            {toggle.label}
+          </a>
+        </div>
+      ) : null}
     </div>
   );
+}
+
+function GalleryLightbox({ item }: { item: Item }) {
+  const gallery = item.gallery;
+  if (!gallery || !gallery.length) return null;
+  const base = `home-lb-${item.id}`;
+  const total = gallery.length;
 
   return (
     <>
       <div id={base} className="hlb">
-        {header(`#${base}-0`, "Single")}
+        <LightboxHeader
+          caption={item.caption}
+          toggle={{ href: `#${base}-0`, label: "Single" }}
+        />
         <div className="px-5 md:px-10 lg:px-[120px] pb-[6em] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-[1400px] mx-auto">
           {gallery.map((g, i) => (
             <a key={i} href={`#${base}-${i}`} className="block">
               <img
                 src={g.thumb}
+                data-gallery-thumb
                 alt={item.caption || "Samuel Bristow photograph"}
                 width={g.w}
                 height={g.h}
@@ -189,7 +201,11 @@ function GalleryLightbox({ item }: { item: Item }) {
         const next = (i + 1) % total;
         return (
           <div key={i} id={`${base}-${i}`} className="hlb-one">
-            {header(`#${base}`, "All", true)}
+            <LightboxHeader
+              caption={item.caption}
+              absolute
+              toggle={{ href: `#${base}`, label: "All" }}
+            />
             <a
               href={`#${base}-${prev}`}
               aria-label="Previous"
@@ -235,6 +251,33 @@ function GalleryLightbox({ item }: { item: Item }) {
         );
       })}
     </>
+  );
+}
+
+function SingleImageLightbox({ item }: { item: Item }) {
+  if (item.type === "video") return null;
+  return (
+    <div id={`home-lb-${item.id}`} className="hlb-one">
+      <LightboxHeader caption={item.caption} absolute />
+      <a href="#!" aria-label="Close" className="absolute inset-0 z-10" />
+      <div
+        className="absolute left-0 right-0 flex items-center justify-center px-5 md:px-[120px] pointer-events-none"
+        style={{ top: "70px", bottom: "70px" }}
+      >
+        <img
+          src={item.image}
+          alt={item.caption || "Still life photograph by Samuel Bristow"}
+          decoding="async"
+          style={{
+            maxWidth: "100%",
+            maxHeight: "100%",
+            width: "auto",
+            height: "auto",
+            objectFit: "contain",
+          }}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -318,7 +361,9 @@ export function HomeGrid({
       {items.map((item) =>
         item.gallery && item.gallery.length ? (
           <GalleryLightbox key={item.id} item={item} />
-        ) : null
+        ) : item.type === "video" ? null : (
+          <SingleImageLightbox key={item.id} item={item} />
+        )
       )}
     </section>
   );

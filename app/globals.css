@@ -60,6 +60,12 @@ body:has(.about-page) footer {
     display: none;
 }
 
+body:has(.hlb:target),
+body:has(.hlb-one:target),
+body:has(.lightbox:target) {
+    overflow: hidden;
+}
+
 .section-name {
     opacity: 0;
     pointer-events: none;
