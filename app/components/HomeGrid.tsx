@@ -18,6 +18,8 @@ const HLB_CSS = `
 .hlb:target{display:block}
 .hlb-one{position:fixed;inset:0;z-index:70;display:none;background-color:var(--white-smoke)}
 .hlb-one:target{display:block}
+.hlb-prev{cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M20%208L12%2016L20%2024'%20fill='none'%20stroke='white'%20stroke-width='4'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Cpath%20d='M20%208L12%2016L20%2024'%20fill='none'%20stroke='%23141210'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, w-resize}
+.hlb-next{cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M12%208L20%2016L12%2024'%20fill='none'%20stroke='white'%20stroke-width='4'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Cpath%20d='M12%208L20%2016L12%2024'%20fill='none'%20stroke='%23141210'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, e-resize}
 `;
 
 function MediaCard({ item, align }: { item: Item; align: string }) {
@@ -101,65 +103,49 @@ function MediaCard({ item, align }: { item: Item; align: string }) {
   );
 }
 
-const LB_TITLE_STYLE: React.CSSProperties = {
-  fontFamily: '"psfournier-std", serif',
-  fontWeight: 300,
-  fontSize: "clamp(14px, 1.4vw, 18px)",
-  letterSpacing: "0.15em",
-};
-
 function LightboxHeader({
   caption,
   absolute = false,
-  toggle,
 }: {
   caption?: string;
   absolute?: boolean;
-  toggle?: { href: string; label: string };
 }) {
   return (
     <div
       className={`${
         absolute ? "absolute top-0 left-0 right-0" : "sticky top-0"
-      } z-30 px-5 md:px-10 lg:px-[120px] py-4 pointer-events-none`}
-      style={{ backgroundColor: "var(--white-smoke)" }}
+      } z-30 text-center pointer-events-none`}
+      style={{ backgroundColor: "var(--white-smoke)", padding: "20px 36px" }}
     >
-      <div className="relative flex items-center justify-between gap-4">
-        <span style={LB_TITLE_STYLE}>
-          Samuel<span style={{ marginLeft: "0.15em" }}>Bristow</span>
-          {caption ? (
-            <span
-              style={{
-                fontFamily: "var(--font-bodoni), serif",
-                letterSpacing: "0.02em",
-                opacity: 0.55,
-                marginLeft: "0.5em",
-              }}
-            >
-              / {caption}
-            </span>
-          ) : null}
+      <h2
+        style={{
+          fontFamily: "var(--font-bodoni), serif",
+          fontSize: "clamp(13px, 1.3vw, 16px)",
+          lineHeight: "1.5",
+          letterSpacing: "0.01em",
+        }}
+      >
+        <strong style={{ fontWeight: 600 }}>Samuel Bristow</strong>
+        <span style={{ opacity: 0.6 }}>
+          {" "}/ Latest Series{caption ? ` / ${caption}` : ""}
         </span>
-        <a
-          href="#!"
-          aria-label="Close"
-          className="pointer-events-auto leading-none hover:opacity-60 transition-opacity"
-          style={{ fontFamily: "var(--font-bodoni), serif", fontSize: "30px" }}
-        >
-          ×
-        </a>
-      </div>
-      {toggle ? (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <a
-            href={toggle.href}
-            className="pointer-events-auto hover:opacity-60 transition-opacity whitespace-nowrap"
-            style={LB_TITLE_STYLE}
-          >
-            {toggle.label}
-          </a>
-        </div>
-      ) : null}
+      </h2>
+      <a
+        href="#!"
+        aria-label="Close"
+        className="pointer-events-auto absolute flex items-center justify-center leading-none hover:opacity-60 transition-opacity"
+        style={{
+          top: "4px",
+          right: "8px",
+          width: "44px",
+          height: "44px",
+          fontFamily: "var(--font-bodoni), serif",
+          fontSize: "30px",
+          color: "var(--brand-black)",
+        }}
+      >
+        ×
+      </a>
     </div>
   );
 }
@@ -173,13 +159,14 @@ function GalleryLightbox({ item }: { item: Item }) {
   return (
     <>
       <div id={base} className="hlb">
-        <LightboxHeader
-          caption={item.caption}
-          toggle={{ href: `#${base}-0`, label: "Single" }}
-        />
+        <LightboxHeader caption={item.caption} />
         <div className="px-5 md:px-10 lg:px-[120px] pb-[6em] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-[1400px] mx-auto">
           {gallery.map((g, i) => (
-            <a key={i} href={`#${base}-${i}`} className="block">
+            <a
+              key={i}
+              href={`#${base}-${i}`}
+              className="block aspect-[3/4] overflow-hidden"
+            >
               <img
                 src={g.thumb}
                 data-gallery-thumb
@@ -188,7 +175,7 @@ function GalleryLightbox({ item }: { item: Item }) {
                 height={g.h}
                 loading="lazy"
                 decoding="async"
-                style={{ width: "100%", height: "auto" }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 className="block"
               />
             </a>
@@ -201,22 +188,18 @@ function GalleryLightbox({ item }: { item: Item }) {
         const next = (i + 1) % total;
         return (
           <div key={i} id={`${base}-${i}`} className="hlb-one">
-            <LightboxHeader
-              caption={item.caption}
-              absolute
-              toggle={{ href: `#${base}`, label: "All" }}
-            />
+            <LightboxHeader caption={item.caption} absolute />
             <a
               href={`#${base}-${prev}`}
               aria-label="Previous"
-              className="absolute top-0 left-0 z-20"
-              style={{ width: "30%", height: "100%" }}
+              className="hlb-prev absolute top-0 left-0 z-20"
+              style={{ width: "40%", height: "100%" }}
             />
             <a
               href={`#${base}-${next}`}
               aria-label="Next"
-              className="absolute top-0 right-0 z-20"
-              style={{ width: "30%", height: "100%" }}
+              className="hlb-next absolute top-0 right-0 z-20"
+              style={{ width: "40%", height: "100%" }}
             />
             <div
               className="absolute left-0 right-0 flex items-center justify-center px-5 md:px-[120px] pointer-events-none"

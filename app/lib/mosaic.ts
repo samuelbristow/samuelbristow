@@ -31,8 +31,11 @@ export function packRows<T>(
     const last = rows[rows.length - 1];
     const lastSumAr = last.cells.reduce((s, c) => s + c.ar, 0);
     if (width / lastSumAr > maxH) {
-      rows[rows.length - 2].cells.push(...last.cells);
-      rows.pop();
+      const prev = rows[rows.length - 2];
+      const combined = [...prev.cells, ...last.cells];
+      const half = Math.ceil(combined.length / 2);
+      rows[rows.length - 2] = { cells: combined.slice(0, half) };
+      rows[rows.length - 1] = { cells: combined.slice(half) };
     }
   }
 
