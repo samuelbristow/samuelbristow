@@ -43,6 +43,8 @@ function buildFromSanity(items: QMedia[]): {
 const LIGHTBOX_CSS = `
 .lightbox{position:fixed;inset:0;z-index:60;display:none;background-color:var(--white-smoke)}
 .lightbox:target{display:flex}
+.lb-prev{cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M20%208L12%2016L20%2024'%20fill='none'%20stroke='white'%20stroke-width='4'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Cpath%20d='M20%208L12%2016L20%2024'%20fill='none'%20stroke='%23141210'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, w-resize}
+.lb-next{cursor:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M12%208L20%2016L12%2024'%20fill='none'%20stroke='white'%20stroke-width='4'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Cpath%20d='M12%208L20%2016L12%2024'%20fill='none'%20stroke='%23141210'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E") 16 16, e-resize}
 `;
 
 const LIGHTBOX_JS = `
@@ -258,13 +260,13 @@ function Lightbox({
       <a
         href={`#mo-lb-${prev}`}
         aria-label="Previous"
-        className={`${btnBase} top-0 left-0`}
+        className={`${btnBase} lb-prev top-0 left-0`}
         style={{ width: "30%", height: "100%" }}
       />
       <a
         href={`#mo-lb-${next}`}
         aria-label="Next"
-        className={`${btnBase} top-0 right-0`}
+        className={`${btnBase} lb-next top-0 right-0`}
         style={{ width: "30%", height: "100%" }}
       />
 
