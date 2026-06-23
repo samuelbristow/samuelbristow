@@ -7,7 +7,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Preloader } from "./Preloader";
-import { isFullWidth, type Item, type Placed } from "../lib/home";
+import { isFullWidth, type Item, type Placed, type GalleryImg } from "../lib/home";
+import { packRows } from "../lib/mosaic";
 
 type PreImg = { src: string; w: number; h: number };
 
@@ -150,36 +151,115 @@ function LightboxHeader({
   );
 }
 
+function GalleryRows({
+  base,
+  gallery,
+  alt,
+  packWidth,
+  packGap,
+  maxH,
+  minN,
+  rowGap,
+}: {
+  base: string;
+  gallery: GalleryImg[];
+  alt: string;
+  packWidth: number;
+  packGap: number;
+  maxH: number;
+  minN: number;
+  rowGap: number;
+}) {
+  const rows = packRows(
+    gallery.map((g) => ({ ar: g.w / g.h, data: g })),
+    packWidth,
+    packGap,
+    maxH,
+    minN
+  );
+  let idx = 0;
+  return (
+    <>
+      {rows.map((row, ri) => {
+        const arAdj = row.ar / (1 - (rowGap / 100) * (row.cells.length - 1));
+        const naturalH =
+          (packWidth - packGap * (row.cells.length - 1)) / row.ar;
+        const widthPct = naturalH > maxH ? (maxH / naturalH) * 100 : 100;
+        return (
+          <div
+            key={ri}
+            className="flex mr-auto"
+            style={{
+              width: `${widthPct}%`,
+              aspectRatio: arAdj,
+              gap: `${rowGap}%`,
+              marginBottom: `${rowGap}%`,
+            }}
+          >
+            {row.cells.map((g) => {
+              const i = idx++;
+              return (
+                <a
+                  key={i}
+                  href={`#${base}-${i}`}
+                  className="block overflow-hidden min-w-0"
+                  style={{ flex: `${g.w / g.h} 0 0` }}
+                >
+                  <img
+                    src={g.thumb}
+                    data-gallery-thumb
+                    alt={alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="block"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </a>
+              );
+            })}
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
 function GalleryLightbox({ item }: { item: Item }) {
   const gallery = item.gallery;
   if (!gallery || !gallery.length) return null;
   const base = `home-lb-${item.id}`;
   const total = gallery.length;
+  const alt = item.caption || "Samuel Bristow photograph";
 
   return (
     <>
       <div id={base} className="hlb">
         <LightboxHeader caption={item.caption} />
-        <div className="px-5 md:px-10 lg:px-[120px] pb-[6em] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-[1400px] mx-auto">
-          {gallery.map((g, i) => (
-            <a
-              key={i}
-              href={`#${base}-${i}`}
-              className="block aspect-[3/4] overflow-hidden"
-            >
-              <img
-                src={g.thumb}
-                data-gallery-thumb
-                alt={item.caption || "Samuel Bristow photograph"}
-                width={g.w}
-                height={g.h}
-                loading="lazy"
-                decoding="async"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                className="block"
-              />
-            </a>
-          ))}
+        <div className="px-5 md:px-10 lg:px-[120px] pb-[6em] max-w-[1400px] mx-auto">
+          <div className="md:hidden">
+            <GalleryRows
+              base={base}
+              gallery={gallery}
+              alt={alt}
+              packWidth={350}
+              packGap={12}
+              maxH={220}
+              minN={1}
+              rowGap={3}
+            />
+          </div>
+          <div className="hidden md:block">
+            <GalleryRows
+              base={base}
+              gallery={gallery}
+              alt={alt}
+              packWidth={1160}
+              packGap={24}
+              maxH={300}
+              minN={2}
+              rowGap={2}
+            />
+          </div>
         </div>
       </div>
 
