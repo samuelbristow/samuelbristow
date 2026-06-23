@@ -174,6 +174,36 @@ const galleryPreloadScript = `(function(){
   else setTimeout(warm,2500);
 })();`;
 
+const galleryFullPreloadScript = `(function(){
+  var done={};
+  function warm(base){
+    if(done[base])return;done[base]=1;
+    var imgs=document.querySelectorAll('[id^="'+base+'-"] img');
+    var urls=[];
+    for(var i=0;i<imgs.length;i++){var u=imgs[i].getAttribute('src');if(u)urls.push(u);}
+    var idx=0,active=0,MAX=3;
+    function next(){
+      while(active<MAX && idx<urls.length){
+        var u=urls[idx++];active++;
+        var im=new Image();
+        im.onload=im.onerror=function(){active--;next();};
+        im.src=u;
+      }
+    }
+    next();
+  }
+  function onHash(){
+    var hash=location.hash.slice(1);
+    if(hash.indexOf('home-lb-')!==0)return;
+    var el=document.getElementById(hash);
+    if(!el)return;
+    var base=el.classList.contains('hlb-one')?hash.replace(/-\\d+$/,''):hash;
+    warm(base);
+  }
+  window.addEventListener('hashchange',onHash);
+  onHash();
+})();`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -194,6 +224,7 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: preloaderScript }} />
         <script dangerouslySetInnerHTML={{ __html: lazyVideoScript }} />
         <script dangerouslySetInnerHTML={{ __html: galleryPreloadScript }} />
+        <script dangerouslySetInnerHTML={{ __html: galleryFullPreloadScript }} />
         <Nav instagramUrl={instagramUrl} />
         <div>
           {children}
