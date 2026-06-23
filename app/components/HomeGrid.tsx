@@ -231,35 +231,72 @@ function GalleryLightbox({ item }: { item: Item }) {
   const total = gallery.length;
   const alt = item.caption || "Samuel Bristow photograph";
 
+  let minAr = Infinity;
+  let maxAr = 0;
+  let sumAr = 0;
+  for (const g of gallery) {
+    const a = g.w / g.h;
+    if (a < minAr) minAr = a;
+    if (a > maxAr) maxAr = a;
+    sumAr += a;
+  }
+  const uniform = minAr > 0 && maxAr / minAr <= 1.12;
+  const avgAr = sumAr / gallery.length;
+
   return (
     <>
       <div id={base} className="hlb">
         <LightboxHeader caption={item.caption} />
         <div className="px-5 md:px-10 lg:px-[120px] pb-[6em] max-w-[1400px] mx-auto">
-          <div className="md:hidden">
-            <GalleryRows
-              base={base}
-              gallery={gallery}
-              alt={alt}
-              packWidth={350}
-              packGap={12}
-              maxH={220}
-              minN={1}
-              rowGap={3}
-            />
-          </div>
-          <div className="hidden md:block">
-            <GalleryRows
-              base={base}
-              gallery={gallery}
-              alt={alt}
-              packWidth={1160}
-              packGap={24}
-              maxH={300}
-              minN={2}
-              rowGap={2}
-            />
-          </div>
+          {uniform ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {gallery.map((g, i) => (
+                <a
+                  key={i}
+                  href={`#${base}-${i}`}
+                  className="block overflow-hidden"
+                  style={{ aspectRatio: avgAr }}
+                >
+                  <img
+                    src={g.thumb}
+                    data-gallery-thumb
+                    alt={alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="block"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </a>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="md:hidden">
+                <GalleryRows
+                  base={base}
+                  gallery={gallery}
+                  alt={alt}
+                  packWidth={350}
+                  packGap={12}
+                  maxH={220}
+                  minN={1}
+                  rowGap={3}
+                />
+              </div>
+              <div className="hidden md:block">
+                <GalleryRows
+                  base={base}
+                  gallery={gallery}
+                  alt={alt}
+                  packWidth={1160}
+                  packGap={24}
+                  maxH={300}
+                  minN={2}
+                  rowGap={2}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
 
