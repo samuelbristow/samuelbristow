@@ -78,8 +78,9 @@ export async function AboutSection({
   const phone = data?.phone || FALLBACK.phone;
   const email = data?.email || FALLBACK.email;
   const copyright = data?.copyright || FALLBACK.copyright;
-  const clients =
-    data?.clients && data.clients.length ? data.clients : FALLBACK_CLIENTS;
+  const clients = [
+    ...(data?.clients && data.clients.length ? data.clients : FALLBACK_CLIENTS),
+  ].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
   const bio = data?.bio && data.bio.length ? data.bio : null;
 
   const telHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
