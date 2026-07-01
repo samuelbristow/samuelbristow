@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
+import { useHash } from "../hooks/useHash";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Preloader } from "./Preloader";
@@ -230,6 +231,19 @@ function GalleryLightbox({ item }: { item: Item }) {
   const base = `home-lb-${item.id}`;
   const total = gallery.length;
   const alt = item.caption || "Samuel Bristow photograph";
+  const hash = useHash();
+  const isActive = hash === `#${base}` || hash.startsWith(`#${base}-`);
+
+  if (!isActive) {
+    return (
+      <>
+        <div id={base} className="hlb" />
+        {gallery.map((_, i) => (
+          <div key={i} id={`${base}-${i}`} className="hlb-one" />
+        ))}
+      </>
+    );
+  }
 
   let minAr = Infinity;
   let maxAr = 0;
@@ -356,8 +370,16 @@ function GalleryLightbox({ item }: { item: Item }) {
 
 function SingleImageLightbox({ item }: { item: Item }) {
   if (item.type === "video") return null;
+  const base = `home-lb-${item.id}`;
+  const hash = useHash();
+  const isActive = hash === `#${base}`;
+
+  if (!isActive) {
+    return <div id={base} className="hlb-one" />;
+  }
+
   return (
-    <div id={`home-lb-${item.id}`} className="hlb-one">
+    <div id={base} className="hlb-one">
       <LightboxHeader caption={item.caption} absolute />
       <a href="#!" aria-label="Close" className="absolute inset-0 z-10" />
       <div
