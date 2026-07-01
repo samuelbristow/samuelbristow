@@ -24,6 +24,7 @@ export type Media = {
   landscape?: boolean;
   link?: string;
   caption?: string;
+  poster?: string;
   gallery?: GalleryImg[];
 };
 
@@ -38,6 +39,7 @@ type RawMedia = {
   vidUrl?: string;
   vidW?: number;
   vidH?: number;
+  posterUrl?: string;
   gallery?: GalleryImg[];
 };
 
@@ -53,6 +55,7 @@ function normalize(d: RawMedia): Media | null {
       landscape: d.landscape ?? true,
       link: d.link,
       caption: d.caption,
+      poster: d.posterUrl,
       gallery,
     };
   }
@@ -80,6 +83,7 @@ const MEDIA_PROJECTION = `{
   "vidUrl": video.asset->url,
   "vidW": width,
   "vidH": height,
+  "posterUrl": poster.asset->url,
   "gallery": gallery[]{
     "src": asset->url,
     "w": asset->metadata.dimensions.width,

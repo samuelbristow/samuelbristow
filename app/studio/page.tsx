@@ -39,7 +39,7 @@ export async function StudioSection({ id }: { id?: string }) {
 
   const images =
     data?.images && data.images.length
-      ? data.images.map((i) => ({ src: sized(i.src, 1400), w: i.w, h: i.h }))
+      ? data.images.map((i) => ({ src: sized(i.src, 1200, 65), w: i.w, h: i.h }))
       : FALLBACK.images;
   const companyName = data?.companyName || FALLBACK.companyName;
   const address =

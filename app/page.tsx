@@ -27,7 +27,7 @@ function toItem(m: Media, i: number): Item {
     type: isGif ? "gif" : "image",
     id,
     href,
-    image: sized(m.src, 800),
+    image: sized(m.src, 800, 65),
     width: m.width,
     height: m.height,
     landscape: m.landscape,
@@ -44,7 +44,7 @@ export default async function Home() {
 
   const preRaw = await getPreloaderImages();
   const preloaderImages = preRaw
-    ? preRaw.map((i) => ({ src: sized(i.src, 800), w: i.w, h: i.h }))
+    ? preRaw.map((i) => ({ src: sized(i.src, 800, 60), w: i.w, h: i.h }))
     : undefined;
 
   return (

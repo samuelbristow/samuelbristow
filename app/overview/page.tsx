@@ -23,7 +23,7 @@ function buildFromSanity(
 ): { desktopRows: Row[]; mobileRows: Row[]; allCells: Cell[] } {
   const cells: Cell[] = sanityCells.map((c) => {
     const items: Item[] = c.images.map((im) => ({
-      src: sized(im.src, 800),
+      src: sized(im.src, 800, 60),
       w: im.w,
       h: im.h,
       ar: round(im.w / im.h),

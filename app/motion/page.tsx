@@ -25,11 +25,12 @@ function buildFromSanity(items: QMedia[]): {
     const ar = round(m.width / m.height);
     const media: Media = {
       kind: m.type === "video" ? "video" : "gif",
-      src: m.type === "video" ? m.src : sized(m.src, 800),
+      src: m.type === "video" ? m.src : sized(m.src, 800, 60),
       w: m.width,
       h: m.height,
       ar,
       caption: m.caption,
+      poster: m.poster ? sized(m.poster, 800, 60) : undefined,
     };
     return { type: "single", ar, item: media };
   });
@@ -96,18 +97,45 @@ function HoverBorder() {
   );
 }
 
+function PlayBadge() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+      <span className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--brand-black)]/45 backdrop-blur-sm">
+        <svg width="14" height="16" viewBox="0 0 14 16" fill="white" aria-hidden="true">
+          <path d="M1 1.2v13.6a1 1 0 0 0 1.52.85l11-6.8a1 1 0 0 0 0-1.7l-11-6.8A1 1 0 0 0 1 1.2Z" />
+        </svg>
+      </span>
+    </div>
+  );
+}
+
 function MediaTile({ item }: { item: Media }) {
   if (item.kind === "video") {
+    if (item.poster) {
+      return (
+        <>
+          <img
+            src={item.poster}
+            alt="Motion film by Samuel Bristow"
+            loading="lazy"
+            decoding="async"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+          <PlayBadge />
+        </>
+      );
+    }
     return (
-      <video
-        src={item.src}
-        data-grid-video
-        muted
-        loop
-        playsInline
-        preload="none"
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-      />
+      <>
+        <video
+          src={item.src}
+          muted
+          playsInline
+          preload="metadata"
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+        <PlayBadge />
+      </>
     );
   }
   return (
