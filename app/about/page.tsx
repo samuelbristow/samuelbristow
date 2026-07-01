@@ -1,6 +1,28 @@
 import type { Metadata } from "next";
-import { PortableText, type PortableTextComponents } from "@portabletext/react";
+import {
+  PortableText,
+  type PortableTextComponents,
+  type PortableTextBlock,
+} from "@portabletext/react";
 import { getAbout } from "../lib/sanity/queries";
+
+const SENTENCE_GAP = "\u2003\u2003";
+
+function spaceSentences(blocks: PortableTextBlock[]): PortableTextBlock[] {
+  return blocks.map((block) => {
+    if (block._type !== "block" || !Array.isArray(block.children)) return block;
+    return {
+      ...block,
+      children: block.children.map((child) => {
+        const c = child as { _type?: string; text?: string };
+        if (c._type === "span" && typeof c.text === "string") {
+          return { ...child, text: c.text.replace(/([.!?]) +/g, `$1${SENTENCE_GAP}`) };
+        }
+        return child;
+      }),
+    };
+  });
+}
 
 export const metadata: Metadata = {
   title: "About",
@@ -125,7 +147,7 @@ export async function AboutSection({
           }}
         >
           {bio ? (
-            <PortableText value={bio} components={ptComponents} />
+            <PortableText value={spaceSentences(bio)} components={ptComponents} />
           ) : (
             <>
               <p className="m-0">
